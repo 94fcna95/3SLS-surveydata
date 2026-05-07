@@ -362,14 +362,7 @@ vcov_robust <- fit$structural$vcov_robust # Robust estimate
 If you use this code in your research, please cite:
 
 ```
-[Your Name]. 2026. "Meritocracy Dynamics and Redistribution Preferences in China"
-Working paper.
-```
-
-For the 3SLS methodology implementation:
-
-```
-[Your Name]. 2026. "Three-Stage Least Squares with Applications to Survey Data"
+[Michel Lubrano, Malo Raballand]. 2026. "Three-Stage Least Squares with Applications to Survey Data"
 GitHub repository: https://github.com/94fcna95/3SLS-Survey
 ```
 
