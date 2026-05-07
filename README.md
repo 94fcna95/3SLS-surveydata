@@ -13,7 +13,7 @@ The implementation provides novel extensions to standard 3SLS estimation:
 - **Reduced-form analysis** and structural inference tools
 - **Complete diagnostic suite** (residuals, correlations, fitted values)
 
-The code is compatible with most survey data structures and can be applied to various research questions.
+The code is compatible with most survey data structures and can be applied to various research questions. We provide two such examples in this repository.
 
 ## Key Features
 
@@ -55,12 +55,7 @@ The code is compatible with most survey data structures and can be applied to va
 
 ### 1. **Installation**
 
-Clone or download this repository:
-
-```bash
-git clone https://github.com/94fcna95/3SLS-Survey.git
-cd 3SLS-Survey
-```
+Download the package and extract the files. Add to working directory.
 
 ### 2. **Loading Dependencies**
 
