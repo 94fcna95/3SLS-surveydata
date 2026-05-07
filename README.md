@@ -55,7 +55,7 @@ The code is compatible with most survey data structures and can be applied to va
 
 ### 1. **Installation**
 
-Download the package and extract the files. Add to working directory.
+To download the package, click on 'Code' -> 'Download Zip' and extract the files. Add to working directory.
 
 ### 2. **Loading Dependencies**
 
@@ -207,24 +207,13 @@ This reproduces a complete analysis pipeline:
 
 The main research uses the **China General Social Survey (CGSS) 2006** microdata.
 
+**Copyright Notice:** The original CGSS data cannot be included in this repository due to copyright restrictions.
+
 **Data Access:**
 1. Visit the [CGSS website](http://www.chinagss.org)
 2. Request access to the 2006 wave microdata
 3. Place the CGSS data file in the `Data/` directory
 4. Update the file path in `Example_Meritocracy.R`
-
-**Copyright Notice:** The original CGSS data cannot be included in this repository due to copyright restrictions.
-
-### Teaching Example: Synthetic Labor Data
-
-For the labor economics teaching example, synthetic data is generated automatically:
-
-**`Examples/labor_data_generator.R`** creates a synthetic dataset that:
-- Replicates realistic labor market relationships
-- Demonstrates proper structure for 3SLS systems
-- Preserves meaningful correlations
-- Is freely distributable and publicly available
-- Requires no external data files
 
 ### Using Synthetic CGSS-like Data
 
@@ -240,6 +229,19 @@ For testing and demonstration of the meritocracy model without access to CGSS da
 source("Examples/synthetic_data_generator.R")
 # Creates: CGSS_synthetic (3,000 observations)
 ```
+
+
+### Teaching Example: Synthetic Labor Data
+
+For the labor economics teaching example, synthetic data is generated automatically:
+
+**`Examples/labor_data_generator.R`** creates a synthetic dataset that:
+- Replicates realistic labor market relationships
+- Demonstrates proper structure for 3SLS systems
+- Preserves meaningful correlations
+- Is freely distributable and publicly available
+- Requires no external data files
+
 
 ## Example Workflow
 
@@ -404,13 +406,9 @@ For GitHub issues: Open an issue on the repository
 
 - Wooldridge, J. M. (2010). *Econometric Analysis of Cross Section and Panel Data* (2nd ed.). MIT Press.
 
-### Research References
-
-- [Your meritocracy paper references here]
-
 ---
 
-**Repository Version:** 2.0  
+**Repository Version:** 1.0  
 **Last Updated:** May 2026  
 **Status:** Production Ready ✅  
 **Maintainer:** [94fcna95] (Malo Raballand)
