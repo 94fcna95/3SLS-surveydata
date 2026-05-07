@@ -83,10 +83,13 @@ Two illustrative examples are provided:
 source("Examples/Example_Labor_Economics.R")
 ```
 
-**For the meritocracy research application (CGSS data structure required - see below):**
+**For the meritocracy research application (CGSS data structure):**
 ```r
 source("Examples/Example_Meritocracy.R")
 ```
+**Note:** This example is designed for actual CGSS 2006 data or 
+similarly structured survey data. The synthetic demonstration 
+example is provided in Example_Labor_Economics.R
 
 ## Repository Structure
 
