@@ -83,7 +83,7 @@ Two illustrative examples are provided:
 source("Examples/Example_Labor_Economics.R")
 ```
 
-**For the meritocracy research application (CGSS data structure):**
+**For the meritocracy research application (CGSS data structure required - see below):**
 ```r
 source("Examples/Example_Meritocracy.R")
 ```
