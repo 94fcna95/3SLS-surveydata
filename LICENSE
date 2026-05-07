@@ -1,0 +1,51 @@
+MIT License
+
+Copyright (c) 2026 [Michel Lubrano], [Zhou Xun] and [Malo Raballand]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+ADDITIONAL TERMS FOR ACADEMIC USE:
+
+If you use this code in academic research, please cite:
+
+[Lubrano, Xun, Raballand]. 2026. [github repo link] . [AMSE].
+
+---
+
+TERMS FOR DATA:
+
+The code in this repository is provided under the MIT License above.
+
+However, the China General Social Survey (CGSS) data used in the original 
+analysis is proprietary and has its own licensing terms. If you use the 
+original CGSS data:
+
+- You must register with the CGSS data provider (http://www.chinagss.org)
+- You must agree to the CGSS data use agreement
+- You must cite CGSS in any publications
+
+The synthetic data provided in this repository (synthetic_data_generator.R) 
+is generated artificially and is free to use and distribute.
+
+---
+
+For questions about licensing, contact:
+[malo.raballand@sciencespo.fr] or [michel.lubrano@univ-amu.fr]
