@@ -90,7 +90,7 @@ Data <- CGSS_synthetic
 | Variable | Name | Type | Range | Description |
 |----------|------|------|-------|-------------|
 | `Migs` | Short-term migration | Ordinal | 1-5 | Migration intention/behavior, short time period |
-| `Migl` | Lont-term migration | Ordinal | 1-5 | Migration intention/behavior, long distance |
+| `Migl` | Lont-term migration | Ordinal | 1-5 | Migration intention/behavior, long term |
 | `RP` | Redistribution preference | Ordinal | 1-5 | Preference for government redistribution |
 | `FcM1` | Merit factor 1 | Continuous | 1-5 | Individual effort (talent, ambition, work ethic) |
 | `FcM2` | Merit factor 2 | Continuous | 1-5 | Education & talent dimension |
