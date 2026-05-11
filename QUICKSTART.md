@@ -2,11 +2,16 @@
 
 Get up and running with the 3SLS system in 5 minutes.
 
-## 1. **Clone the Repository**
+## 1. **Clone the Repository, or download the package**
 
 ```bash
 git clone https://github.com/yourusername/3sls-meritocracy.git
 cd 3sls-meritocracy
+
+# install.packages("devtools")
+devtools::install_github("94fcna95/surveysearch")
+
+To download the package, click on 'Code' -> 'Download Zip' and extract the files. Add to working directory.
 ```
 
 ## 2. **Open R/RStudio**
