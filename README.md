@@ -377,7 +377,7 @@ vcov_ml <- fit$structural$vcov_ml        # ML estimate
 vcov_robust <- fit$structural$vcov_robust # Robust estimate
 ```
 
-## Citation
+## Citation, Licencing, Contributing
 
 If you use this code in your research, please cite:
 
@@ -386,17 +386,14 @@ If you use this code in your research, please cite:
 GitHub repository: https://github.com/94fcna95/3SLS-Survey
 ```
 
-## License
-
+### License
 This code is released under the **MIT License**. See `LICENSE` file for details.
-
 You are free to:
 - Use this code for research and commercial projects
 - Modify and distribute the code
 - Include this code in your own projects
 
-## Contributing
-
+### Contributing
 Contributions are welcome! Please:
 1. Fork the repository
 2. Create a feature branch
@@ -412,19 +409,8 @@ For questions regarding the research or code:
 
 For GitHub issues: Open an issue on the repository
 
-## References
-
-### Methodological References
-
-- Zellner, A. (1962). "An efficient method of estimating seemingly unrelated regressions and tests for aggregation bias." *Journal of the American Statistical Association*, 57(298), 348-368.
-
-- Greene, W. H. (2012). *Econometric Analysis* (7th ed.). Prentice Hall. [Chapter 10: Systems of Equations]
-
-- Wooldridge, J. M. (2010). *Econometric Analysis of Cross Section and Panel Data* (2nd ed.). MIT Press.
-
 ---
 
 **Repository Version:** 1.0  
 **Last Updated:** May 2026  
-**Status:** Production Ready ✅  
 **Maintainer:** [94fcna95] (Malo Raballand)
