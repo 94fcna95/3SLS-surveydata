@@ -121,13 +121,13 @@ See `docs/VARIABLE_GUIDE.md` for detailed variable definitions.
 The last command produces output ready for inclusion in a LaTeX file. GitHub does not render LaTeX math, so results are shown as screenshots.
 
 #### Structural Equation: `Migs`
-<img width="229" height="145" alt="Screenshot 2026-05-13 114837" src="https://github.com/user-attachments/assets/6e14a423-fd84-4bb5-a08a-ba3bdc2a4938" />
+<img width="595" height="373" alt="image" src="https://github.com/user-attachments/assets/b3bcd548-a237-4ad4-a546-a2b56c02b0b7" />
 
 #### Structural Equation: `Migl`
-<img width="399" height="272" alt="Screenshot 2026-05-13 114956" src="https://github.com/user-attachments/assets/31cecb35-101c-4d25-bcf7-1da09b130e40" />
+<img width="589" height="401" alt="image" src="https://github.com/user-attachments/assets/86d6f12d-f197-41f9-88d3-f57a41bfb1b5" />
 
 #### Structural Equation: `RP`
-<img width="398" height="293" alt="Screenshot 2026-05-13 115029" src="https://github.com/user-attachments/assets/443da5ce-cc44-4dae-9554-a990f38d44dc" />
+<img width="604" height="436" alt="image" src="https://github.com/user-attachments/assets/a6b7c469-e884-4dc7-943c-0784f0e3d321" />
 
 *Significance codes: \*\*\* p < 0.001 · \*\* p < 0.01 · \* p < 0.05 · . p < 0.1*
 
