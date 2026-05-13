@@ -74,12 +74,12 @@ source("Examples/Example_Labor_Economics.R")
 ```
 
 **For the meritocracy and redistribution research application (CGSS data structure):**
-**Note:** This example is designed for actual CGSS 2006 data or 
-similarly structured survey data. The synthetic demonstration 
-example is provided in Example_Labor_Economics.R
 ```r
 source("Examples/Example_Meritocracy.R")
 ```
+**Note:** This example is designed for actual CGSS 2006 data or 
+similarly structured survey data. With proper data, a demonstration 
+example is provided in Example_Labor_Economics.R
 
 
 ## Repository Structure
