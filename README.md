@@ -96,7 +96,7 @@ example is provided in Example_Labor_Economics.R
 ├── R/                                 # Core library functions
 │   ├── CGT-3SLS-lib.r                # Main 3SLS estimation & tools
 │   ├── CGT-LaTex-lib.r               # LaTeX output functions
-│   └── Meritocracy-lib.r             # Utility functions
+│   └── Meritocracy-lib.r             # Utility functions for full meritocracy 3SLS (disregard)
 │
 ├── Examples/                          # Illustrative examples
 │   ├── Example_Labor_Economics.R      # Teaching example (open data)
