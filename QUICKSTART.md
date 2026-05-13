@@ -2,7 +2,7 @@
 
 Get up and running with the 3SLS system in 5 minutes.
 
-## 1. Clone
+## 1. Clone, open and load
 
 ```bash
 git clone https://github.com/94fcna95/3SLS-surveydata.git
@@ -13,7 +13,7 @@ cd 3SLS-surveydata
 
 ---
 
-## 2. Open
+#### Open
 
 In R or RStudio, set your working directory to the repository root:
 
@@ -25,7 +25,7 @@ setwd("path/to/3SLS-surveydata")
 
 ---
 
-## 3. Load
+#### Load
 
 ```r
 source("Deps.R")
@@ -43,7 +43,7 @@ This single command:
 
 ---
 
-## 4. Run the Example (Labor Market)
+## 2. Run the Example (Labor Market)
 
 ```r
 source("Examples/Example_Labor_Economics.R")
@@ -66,7 +66,7 @@ It produces:
 
 ---
 
-## 5. View Results
+## 3. View Results
 
 ```r
 # Full summary with diagnostics
@@ -83,7 +83,7 @@ summary(fit)
 
 ---
 
-## 6. Common Tasks
+## 4. Common Tasks
 
 ### Available Functions
 
@@ -150,7 +150,7 @@ cor(residual_matrix, use = "complete.obs")
 
 ---
 
-## 7. Going Further (3SLS Meritocracy)
+## 5. Going Further (3SLS Meritocracy)
 
 The labor market example is a pedagogical entry point. The full research application is the **meritocracy and redistribution in China** study (Zhou & Lubrano, 2026), which uses a 7-equation system on CGSS 2006 survey data.
 
