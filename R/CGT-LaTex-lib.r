@@ -7,15 +7,15 @@
 # print(latex_rf[[1]], include.rownames = TRUE)
 
 .R2_structural <- function(fit, i) {
-  
-  Eq = fit$eq_names
-  r   <- fit$residuals[[i]]
-  idx <- fit$idx_list[[i]]        # <-- crucial
-  y   <- get(Eq[i])[idx]          # align y with residuals
-  yp  <- y - r
-  R2  <- var(yp) / var(y)
-  
-  R2
+  r       <- fit$residuals[[i]]
+  idx     <- fit$idx_list[[i]]
+  eq_name <- fit$eq_names[i]
+  y <- tryCatch(
+    get(eq_name, envir = .GlobalEnv)[idx],
+    error = function(e) NULL
+  )
+  if (is.null(y) || length(y) != length(r)) return(NA_real_)
+  cor(y, y - r)^2
 }
 
 
