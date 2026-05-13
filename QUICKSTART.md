@@ -52,9 +52,9 @@ source("Examples/Example_Labor_Economics.R")
 This teaching example demonstrates the 3SLS methodology using freely distributable synthetic data, addressing a classic simultaneity problem:
 
 ```
-log_wage  ~ education + experience + employment + region
-education ~ ability + family_background + age + experience
-employment ~ log_wage + education + age + region
+eq1 = log_wage    ~ education + experience + hours_worked + region
+eq2 = education   ~ ability + family_background + age + experience
+eq3 = hours_worked ~ log_wage + education + age + region
 ```
 It produces:
 - Structural coefficient estimates
