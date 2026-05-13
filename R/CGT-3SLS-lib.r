@@ -323,7 +323,7 @@ summary.threeSLS_fit <- function(object, digits = 4, robust = TRUE) {
     if (!is.null(vcov_all)) se <- sqrt(diag(vcov_all)[start:end]) else se <- rep(NA, length(coefs))
     tval <- coefs / se; pval <- 2 * pnorm(-abs(tval)); stars <- stars_fun(pval)
     tab <- data.frame(Estimate = round(coefs, digits), Std.Error = round(se, digits),
-                      "t value" = round(tval, digits+1), "Pr(>|t|)" = signif(pval, 3),
+                      "t value" = round(tval, digits+1), "Pr(>|t|)" = ifelse(pval < 0.001, "< 0.001", formatC(signif(pval, 3), format = "g")),
                       Signif = stars, row.names = names(coefs), check.names = FALSE, stringsAsFactors = FALSE)
     cat("\nEquation:", nm, "\n"); print(tab, digits = digits)
     resid_struct <- object$residuals[[i]]
