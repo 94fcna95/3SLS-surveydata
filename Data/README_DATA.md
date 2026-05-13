@@ -1,5 +1,7 @@
 # Data Documentation & Licensing
 
+**Note : If you wish to test the tools in this package, without looking into our case-study, you can refer to the Read.Me and the pre-installed comprehensive labor-market example**
+
 ## Data Source
 
 This project uses the **China General Social Survey (CGSS) 2006** microdata.
@@ -35,101 +37,44 @@ The original CGSS data is **copyrighted** and not freely redistributable. Users 
 > China General Social Survey (CGSS), Renmin University of China, [year]. 
 > Accessed at http://www.chinagss.org
 
-## Using the Repository
-
-### Option 1: With Original Data (Recommended for Research)
-
-If you have obtained the CGSS 2006 data:
-
-```r
-# 1. Place CGSS data file in Data/ directory
-# 2. Load and prepare:
-
-source("Deps.R")
-
-# Load CGSS data
-CGSS_data <- read.csv("Data/CGSS_2006.csv")
-# or read.spss(), read.dta(), etc. depending on format
-
-# 3. Run analysis scripts with original data
-source("Examples/Example_Meritocracy.R")
-```
-
-### Option 2: With Synthetic Data (For Learning/Testing)
-
-The repository includes a synthetic data generator that creates data mirroring the CGSS structure:
-
-```r
-source("Deps.R")
-source("Examples/synthetic_data_generator.R")
-
-# Run analysis with synthetic data
-Data <- CGSS_synthetic
-
-# Note: Results will differ from the original analysis,
-# but the workflow and code structure is identical
-```
-
-**Advantages of synthetic data:**
-- ✓ Freely distributable
-- ✓ No licensing restrictions
-- ✓ Useful for teaching and methodology demonstration
-- ✓ Preserves variable correlations and distributions
-
-**Limitations:**
-- ✗ Not representative of actual Chinese population
-- ✗ Results cannot be used for policy recommendations
-- ✗ Magnitudes of effects are illustrative only
-
 ## Variable Guide
 
 ### Key Variables Used in Analysis
 
 #### **Outcome Variables**
+| Variable | Description |
+|----------|-------------|
+| `Migs` | Seasonal migrant |
+| `Migl` | Long-term migrant |
+| `RP` | Redistribution preference |
 
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `Migs` | Short-term migration | Ordinal | 1-5 | Migration intention/behavior, short time period |
-| `Migl` | Lont-term migration | Ordinal | 1-5 | Migration intention/behavior, long term |
-| `RP` | Redistribution preference | Ordinal | 1-5 | Preference for government redistribution |
-| `FcM1` | Merit factor 1 | Continuous | 1-5 | Individual effort (talent, ambition, work ethic) |
-| `FcM2` | Merit factor 2 | Continuous | 1-5 | Education & talent dimension |
-| `FcAM` | Actual merit factors | Continuous | 1-5 | Non-meritocratic factors (networks, luck, family) |
-
-#### **Environmental/Economic Variables**
-
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `water` | Water access | Ordinal | 1-5 | Quality of water access/supply |
-| `flood` | Flood exposure | Ordinal | 1-5 | Exposure to flooding risk |
-| `rev` | Revenue/economy | Ordinal | 1-5 | Local economic conditions |
-| `Dif` | Income inequality | Ordinal | 1-5 | Perception of income differences |
+#### **Instrumental Variables**
+| Variable | Description |
+|----------|-------------|
+| `flood` | Importance of floods in the province |
+| `water` | Water resources in the province |
 
 #### **Demographic Variables**
-
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `age` | Age | Continuous | 18-85 | Respondent age in years |
-| `age2` | Age squared | Continuous | - | Age² / 100 (for non-linear effects) |
-| `female` | Gender | Binary | 0,1 | 1 = female, 0 = male |
-| `Urb` | Urban | Binary | 0,1 | 1 = urban, 0 = rural |
-| `Rur` | Rural | Binary | 0,1 | 1 = rural, 0 = urban |
-| `yeduc` | Education years | Continuous | 0-20 | Years of formal education completed |
+| Variable | Description |
+|----------|-------------|
+| `age` | Age of the respondent |
+| `female` | Gender of the respondent |
+| `Single` | Marital status of the respondent |
+| `party` | The respondent is a member of the CCP |
 
 #### **Economic Variables**
+| Variable | Description |
+|----------|-------------|
+| `linc` | Log of personal income+1 |
+| `idlinc` | Indicator for a zero income |
+| `lowerfin` | Having negative financial expectations |
+| `Dif` | Median wage discrimination for peasant worker at the provincial level |
 
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `Income` | Household income | Continuous | - | Annual household income (in log scale: `linc`) |
-| `linc` | Log income | Continuous | - | Natural log of household income |
-| `linc2` | Log income squared | Continuous | - | (linc)² |
-
-#### **Belief & Political Variables**
-
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `party` | Party member | Binary | 0,1 | 1 = member, 0 = non-member |
-| `believer` | Religious believer | Binary | 0,1 | 1 = believer, 0 = non-believer |
+#### **Hukou Status**
+| Variable | Description |
+|----------|-------------|
+| `Rur` | Having a rural hukou |
+| `Urb` | Having an urban hukou |
 
 #### **Survey Design**
 
@@ -137,6 +82,57 @@ Data <- CGSS_synthetic
 |----------|------|------|-------|-------------|
 | `weight` | Sampling weight | Continuous | 0.1-3 | Survey weight (normalized, mean = 1) |
 | `id` | Respondent ID | Integer | 1-n | Unique identifier |
+
+
+## Using the Repository
+
+Clone the repository and run from its root directory.
+
+### With Original CGSS Data
+
+Place your CGSS 2006 file in `Data/`, then:
+
+```r
+source("Examples/Example_Meritocracy.R")
+```
+
+### With Synthetic Data (For Learning/Testing)
+
+The repository cannot include a synthetic data generator mirroring the CGSS structure due to licensing agreements. Comparable real or synthetic data is nonetheless viable with our workflow, with prior variable preparation.
+
+```r
+source("Examples/Example_Meritocracy.R")  # uses CGSS_synthetic by default
+```
+
+| | Synthetic / Free-use data |
+|---|---|
+| ✓ | Freely distributable, no licensing restrictions |
+| ✓ | Useful for teaching and methodology demonstration |
+| ✗ | Not representative of the actual Chinese population |
+| ✗ | Results cannot be used for policy recommendations |
+| ✗ | Magnitudes of effects are illustrative only |
+
+> All dependencies, libraries, and utility functions — including `Meritocracy-lib.r`, `CGT-3SLS-lib.r` and `CGT-LaTex-lib.r` — are loaded automatically via `Deps.R`.
+
+### What `Example_Meritocracy.R` Does
+
+1. **Variable transformation** — log transformation for income, squared terms for age and income, scaling of continuous variables
+2. **Merit index construction** — factor analysis on individual items (real data) or synthetic generation (example), standardized to 1–5 scale
+3. **Missing value handling** — complete-case analysis, implicit restrictions (e.g. rural-only samples), survey weight application
+4. **Data validation** — range checks, correlation verification, summary statistics
+
+### What `Deps.R` Does
+
+`Deps.R` is called automatically by `Example_Meritocracy.R` and handles all setup:
+
+1. **Package installation** — checks for and installs any missing R packages (`MASS`, `Matrix`, `weights`, `xtable`, `DescTools`, `psych`)
+2. **Core libraries** — sources the three internal libraries in order:
+   - `R/CGT-3SLS-lib.r` — 3SLS estimation functions
+   - `R/CGT-LaTex-lib.r` — LaTeX output functions
+   - `R/Meritocracy-lib.r` — utility functions (`POLS`, `Transl`, `EGP`)
+3. **Verification** — confirms all key functions are available before analysis begins
+
+You do not need to call `source("Deps.R")` manually.
 
 ### Sample Restriction
 
@@ -154,82 +150,11 @@ The analysis applies **equation-specific restrictions**:
 - **Synthetic data:** Generated without missing values for simplicity
 - **Best practice:** Document all missing data mechanisms in real applications
 
-#### Common sources of missingness:
+#### Common sources of missingness in CGSS:
 - Refusal to answer (especially income, political affiliation)
 - Item nonresponse (forgetting, inability to estimate)
 - Implicit restrictions (e.g., Migs/Migl only for rural residents)
 
-## Data Preparation Steps
-
-### In the Example Script
-
-The `Example_Meritocracy.R` performs:
-
-1. **Variable transformation:**
-   - Log transformation for income variables
-   - Scaling of continuous variables
-   - Construction of squared terms for age and income
-
-2. **Merit index construction:**
-   - Factor analysis on individual items (in real analysis)
-   - Synthetic generation (in example)
-   - Standardization to 1-5 scale
-
-3. **Missing value handling:**
-   - Complete-case analysis (rows with any NA removed)
-   - Implicit restrictions (e.g., rural-only samples)
-   - Survey weight application
-
-4. **Data validation:**
-   - Range checks (e.g., age 18-85)
-   - Correlation verification
-   - Summary statistics
-
-## Replication with Original Data
-
-### Step 1: Prepare CGSS Raw Data
-
-```r
-# Load raw CGSS 2006 data
-CGSS_raw <- read.dta("CGSS2006_original.dta")
-
-# Create dichotomous variables
-CGSS_raw$female <- as.numeric(CGSS_raw$q_gender == 2)
-CGSS_raw$Urb <- as.numeric(CGSS_raw$q_region_type == 1)
-CGSS_raw$Rur <- 1 - CGSS_raw$Urb
-
-# Log transformation
-CGSS_raw$linc <- log(CGSS_raw$q_income + 1)
-CGSS_raw$linc2 <- CGSS_raw$linc^2
-```
-
-### Step 2: Construct Merit Indices
-
-```r
-# Load merit items from raw data
-merit_items <- CGSS_raw[, c("q_merit_talent", "q_merit_ambition", 
-                             "q_merit_work", "q_merit_education")]
-
-# Apply factor analysis
-library(psych)
-fa_result <- fa(merit_items, nfactors = 2, fm = "ml", weights = CGSS_raw$weight)
-
-# Extract factor scores
-FcM1 <- factor.scores(merit_items, fa_result)$scores[, 1]
-FcM2 <- factor.scores(merit_items, fa_result)$scores[, 2]
-```
-
-### Step 3: Run Full Analysis
-
-```r
-source("Deps.R")
-
-# Your prepared data
-Data <- CGSS_raw
-
-# Run analysis
-source("Examples/Example_Meritocracy.R")
-```
 
 ## Recommended Citations
 
@@ -243,12 +168,6 @@ When using this code with CGSS data:
   url = {http://www.chinagss.org}
 }
 
-@article{AuthorYear,
-  author = {Your Name and Your Professor},
-  title = {Your Paper Title},
-  year = {Year},
-  journal = {Your Journal}
-}
 ```
 
 ## Questions & Support

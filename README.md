@@ -2,9 +2,9 @@
 
 ## Summary
 
-This repository contains the code accompanying research studying **meritocracy dynamics, migration decisions, and preferences for redistribution** in China. All main functions and dependencies required to apply the **3SLS estimation methodology** using R are available in this repository, along with comprehensive examples.
+This repository contains the code accompanying research studying **meritocracy dynamics, migration decisions, and preferences for redistribution** in China. All main functions and dependencies required to apply the **3SLS estimation methodology** using R are available in this repository, along with comprehensive examples. _Xun Zhou and Michel Lubrano (2026) Meritocracy and preference for redistribution in China: the impact of internal migrations. Amse Working Paper._
 
-The implementation provides novel extensions to standard 3SLS estimation:
+The implementation provides novel extensions to standard 3SLS estimations available in the R package _systemfit_ :
 - **Sub-sampling capability** for equation-specific sample restrictions via `subset()` syntax
 - **Full weight support** (essential for survey data)
 - **Flexible instrumental variable specification**
@@ -12,8 +12,9 @@ The implementation provides novel extensions to standard 3SLS estimation:
 - **Robust variance estimation** with multiple covariance options
 - **Reduced-form analysis** and structural inference tools
 - **Complete diagnostic suite** (residuals, correlations, fitted values)
+- ****For compatibility reasons**, the calling syntax is very similar to that of systemfit.
 
-The code is compatible with most survey data structures and can be applied to various research questions. We provide two such examples in this repository.
+The code is compatible with most survey data structures and can be applied to various research questions. We provide two such examples in this repository. Moreover, the functions are optimal for large data sets. The quoted research paper makes use of a survey dataset with more than 10,000 observations.
 
 ## Key Features
 
@@ -38,24 +39,13 @@ The code is compatible with most survey data structures and can be applied to va
 - Includes significance stars, t-statistics, and R² values
 - Supports both structural and reduced-form equations
 - Compatible with `xtable` for document integration
-
-### Supporting Tools
-
-**`Meritocracy-lib.r`** — Utility functions
-- Factor analysis and index construction
-- Data preprocessing and missing value handling
-- Survey weighting implementation
-
-**`CGT-LaTex-lib.r`** — Custom LaTeX formatting
-- Unified table output formatting
-- Significance testing and star annotation
-- Equation-specific reporting
+- Called through **`CGT-LaTex-lib.r`**
 
 ## How to Use These Materials
 
 ### 1. **Installation**
 
-To download the package, click on 'Code' -> 'Download Zip' and extract the files. Add to working directory.
+To download the package, click on 'Code' -> 'Download Zip' and extract the files. Add to your working directory.
 
 ### 2. **Loading Dependencies**
 
@@ -83,13 +73,14 @@ Two illustrative examples are provided:
 source("Examples/Example_Labor_Economics.R")
 ```
 
-**For the meritocracy research application (CGSS data structure):**
+**For the meritocracy and redistribution research application (CGSS data structure):**
 ```r
 source("Examples/Example_Meritocracy.R")
 ```
 **Note:** This example is designed for actual CGSS 2006 data or 
-similarly structured survey data. The synthetic demonstration 
+similarly structured survey data. With proper data, a demonstration 
 example is provided in Example_Labor_Economics.R
+
 
 ## Repository Structure
 
@@ -105,13 +96,13 @@ example is provided in Example_Labor_Economics.R
 ├── R/                                 # Core library functions
 │   ├── CGT-3SLS-lib.r                # Main 3SLS estimation & tools
 │   ├── CGT-LaTex-lib.r               # LaTeX output functions
-│   └── Meritocracy-lib.r             # Utility functions
+│   └── Meritocracy-lib.r             # Utility functions for full meritocracy 3SLS (disregard)
 │
 ├── Examples/                          # Illustrative examples
 │   ├── Example_Labor_Economics.R      # Teaching example (open data)
 │   ├── labor_data_generator.R         # Synthetic labor market data
 │   ├── Example_Meritocracy.R          # Research application (CGSS structure)
-│   └── synthetic_data_generator.R     # Generates synthetic CGSS-like data
+│   
 │
 ├── Data/                              # Data directory
 │   └── README_DATA.md                 # Data documentation & licensing
@@ -123,40 +114,37 @@ example is provided in Example_Labor_Economics.R
 ## Research Application: Meritocracy Dynamics in China
 
 ### Research Questions
+This project studies the interconnected dynamics of the desire for redistribution in a compartimented world with rural and urban indidivudals, both with two individual beliefs systems. These two spheres are commected, via migrants who seek better fortunes in urban hubs. For studying this effect, we need to endogeneise the two types of migration and use 3SLS with weights and a subsample as migrants come only from the rural world. 
 
-This project studies the interconnected dynamics of:
+Thus, we wish to determine : 
 
 1. **How do environmental shocks affect migration decisions?**
-   - Small-scale internal migration (Migs)
-   - Large-scale internal migration (Migl)
+   - Seasonal migration (Migs)
+   - Long-term migration (Migl)
    - Sample restriction to rural populations
 
 2. **What drives preferences for redistribution (RP)?**
-   - Direct environmental effects
    - Indirect effects through migration and beliefs
-
+   - Direct environmental effects
+  
 3. **How do meritocratic beliefs evolve?**
    - Merit-based factors (FcM1, FcM2): talent, education, work ethic
    - Non-merit factors (FcAM): family background, social networks, luck
 
 ### Structural Model
 
-The research employs a 6-equation system estimated simultaneously:
+The research employs a 6-equation system estimated simultaneously. For the purpouse of this demonstration, we simplify to a 3 equation model
 
 ```
-Migs ~ water + flood + age + age² + female + believer | subset(Urb == 0)
-Migl ~ flood + age + age² + linc + FcM1 | subset(Urb == 0)
-RP ~ water + party + believer + Rur + Migs + Migl + Dif + FcM1 + FcM2
-FcM1 ~ water + rev + yeduc + Rur + Migl + Dif + FcAM
-FcM2 ~ water + rev + yeduc + Rur + Migs + Migl + Dif + FcAM
-FcAM ~ water + rev + age + age² + party + Rur + Migl + FcM1 + FcM2
+eq1 = Migs~water+flood+age+female+linc+idlinc | subset(Urb == 0)
+eq2 = Migl~water+flood+age+Single+linc+idlinc+Dif | subset(Urb == 0)
+eq3 = RP~water+party+lowerfin+linc+idlinc+Rur+Migs+Migl
 ```
 
 **Key Features:**
-- **Endogenous variables:** Migs, Migl, RP, FcM1, FcM2, FcAM (determined jointly)
-- **Exogenous variables:** water, rev, flood, age, age², female, linc, yeduc, party, believer, Dif, Rur
-- **Sample restrictions:** Migration equations estimated only for rural residents (Urb=0)
-- **Unique feature:** The `| subset()` syntax enables equation-specific sample restrictions
+- **Endogenous variables:** Migs, Migl, RP  (determined jointly)
+- **Exogenous variables:** water, rev, flood, age, female, linc, idlinc, lowerfin, party, believer, Dif.
+- **Sample restrictions:** Migration equations estimated only for rural residents (Urb=0) through the **Unique feature** of `| subset()` syntax enableing equation-specific sample restrictions
 
 See `docs/VARIABLE_GUIDE.md` for detailed variable definitions and data preparation.
 
@@ -218,22 +206,6 @@ The main research uses the **China General Social Survey (CGSS) 2006** microdata
 3. Place the CGSS data file in the `Data/` directory
 4. Update the file path in `Example_Meritocracy.R`
 
-### Using Synthetic CGSS-like Data
-
-For testing and demonstration of the meritocracy model without access to CGSS data:
-
-**`Examples/synthetic_data_generator.R`** creates synthetic CGSS-like data that:
-- Mirrors the structure of CGSS 2006
-- Preserves variable relationships and distributions
-- Maintains survey weighting structure
-- Is freely distributable
-
-```r
-source("Examples/synthetic_data_generator.R")
-# Creates: CGSS_synthetic (3,000 observations)
-```
-
-
 ### Teaching Example: Synthetic Labor Data
 
 For the labor economics teaching example, synthetic data is generated automatically:
@@ -254,34 +226,50 @@ For the labor economics teaching example, synthetic data is generated automatica
 # 1. Load dependencies
 source("Deps.R")
 
-# 2. Load your CGSS data or use synthetic data
-source("Examples/synthetic_data_generator.R")
-data <- CGSS_synthetic  # or load your CGSS data
+# 2. Load your CGSS data, use synthetic data or another data source
+data <- CGSS  
 
-# 3. Define the meritocracy system
-equations <- list(
-  Migs = Migs ~ water + flood + age + age2 + female + believer | subset(Urb == 0),
-  Migl = Migl ~ flood + age + age2 + linc + FcM1 | subset(Urb == 0),
-  RP = RP ~ water + party + believer + Rur + Migs + Migl + Dif + FcM1 + FcM2,
-  # ... remaining equations
-)
+# 3. Define the 3SLS system
+Data3SLS = data.frame(Migs,Migl,RP,water,flood,age,Single,female, linc,idlinc,Dif,party,lowerfin,Rur,Urb)
 
-inst <- ~ water + rev + flood + age + age2 + female + linc + yeduc + party + believer + Dif + Rur
+eq1 = Migs~water+flood+age+female+linc+idlinc | subset(Urb == 0)
+eq2 = Migl~water+flood+age+Single+linc+idlinc+Dif | subset(Urb == 0)
+eq3 = RP~water+party+lowerfin+linc+idlinc+Rur+Migs+Migl
+
+equations <- list(Migs=eq1,Migl=eq2,RP=eq3)
+
+inst = ~water+flood+age+female+linc+idlinc+lowerfin+party+Dif+Rur+Single
 
 # 4. Estimate the system
-fit <- threeSLS_system(
-  equations = equations,
-  inst = inst,
-  data = data,
-  weights = weight,
-  verbose = TRUE
-)
+fit <-threeSLS_system(
+    equations = equations,
+    inst = inst,
+    data = Data3SLS,
+    weights = weight)
 
 # 5. Generate publication-ready output
 summary(fit)
-latex_struct <- latex_structural_3SLS(fit, robust = TRUE)
-rf <- reduced_form_3SLS(fit, data = data)
+print(latex_structural_3SLS(fit, robust = TRUE))
 ```
+### Results
+
+The last command produces output ready for inclusion in a LaTeX file. Results are summarised below. GitHub does not render LaTeX math, so the output is screenshotted from a LaTeX Document.
+
+#### Structural Equation: `Migs`
+<img width="229" height="145" alt="Screenshot 2026-05-13 114837" src="https://github.com/user-attachments/assets/6e14a423-fd84-4bb5-a08a-ba3bdc2a4938" />
+
+
+#### Structural Equation: `Migl`
+
+<img width="399" height="272" alt="Screenshot 2026-05-13 114956" src="https://github.com/user-attachments/assets/31cecb35-101c-4d25-bcf7-1da09b130e40" />
+
+
+#### Structural Equation: `RP`
+
+<img width="398" height="293" alt="Screenshot 2026-05-13 115029" src="https://github.com/user-attachments/assets/443da5ce-cc44-4dae-9554-a990f38d44dc" />
+
+*Significance codes: \*\*\* p < 0.001 · \*\* p < 0.01 · \* p < 0.05 · . p < 0.1*
+
 
 ### Labor Economics Teaching Example
 
@@ -291,6 +279,28 @@ source("Examples/Example_Labor_Economics.R")
 ```
 
 This runs the complete teaching pipeline automatically.
+
+## Zhou, Lubrano (2026) 3SLS model
+
+```
+eq1 = Migs~water+rev+flood+age+age2+female+believer+idlinc  | subset(Urb == 0) #+party
+eq2 = Migl~water+rev+flood+age+Single+yeduc+Dif+idlinc      | subset(Urb == 0) #+age2 
+
+eq3 = FcAM~water+rev+age+age2+party+believer+Dif+Urb   # flood+linc
+
+eq4 = FcM1~water+rev+yeduc+beterfin+FcAM+Dif+Urb # linc+idlinc
+eq5 = FcM2~water+rev+yeduc+FcAM+FcM1+Dif+Urb # linc+beterfin
+
+eq6 = RP~water+rev+lowerfin+linc+idlinc+
+      FcAM+FcM1+FcM2+Rur+Migs+Migl
+
+eq7 = linc~water+rev+age+age2+female+Single+yeduc+idlinc+Urb #+Rur #+Migs+Migl
+
+equations <- list(linc=eq7,Migs=eq1,Migl=eq2,FcAM=eq3,FcM1=eq4,FcM2=eq5,RP=eq6)
+
+inst = ~water+rev+flood+age+age2+female+beterfin+lowerfin+
+  yeduc+party+believer+Dif+Rur+Single+Urb+idlinc # +Dife
+```
 
 ## Key Output Components
 
