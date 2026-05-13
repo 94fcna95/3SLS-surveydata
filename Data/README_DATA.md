@@ -35,51 +35,6 @@ The original CGSS data is **copyrighted** and not freely redistributable. Users 
 > China General Social Survey (CGSS), Renmin University of China, [year]. 
 > Accessed at http://www.chinagss.org
 
-## Using the Repository
-
-### Option 1: With Original Data (Recommended for Research)
-
-If you have obtained the CGSS 2006 data:
-
-```r
-# 1. Place CGSS data file in Data/ directory
-# 2. Load and prepare:
-
-source("Deps.R")
-
-# Load CGSS data
-CGSS_data <- read.csv("Data/CGSS_2006.csv")
-# or read.spss(), read.dta(), etc. depending on format
-
-# 3. Run analysis scripts with original data
-source("Examples/Example_Meritocracy.R")
-```
-
-### Option 2: With Synthetic Data (For Learning/Testing)
-
-The repository unfortunately cannot include a synthetic data generator that creates data mirroring the CGSS structure, due to licencing agreements. Comparable real data (or synthetic) is nonetheless viable with our workflow, with prior variable preparation.
-
-```r
-source("Deps.R")
-
-# Run analysis with synthetic data/your own
-Data <- CGSS_similar
-
-# Note: Results will differ from the original analysis,
-# but the workflow and code structure is identical
-```
-
-**Advantages of free-use data alternatives and/or synthetic data:**
-- ✓ Freely distributable
-- ✓ No licensing restrictions
-- ✓ Useful for teaching and methodology demonstration
-- ✓ Preserves variable correlations and distributions
-
-**Limitations:**
-- ✗ Not representative of actual population (in this case, Chinese)
-- ✗ Results cannot be used for policy recommendations
-- ✗ Magnitudes of effects are illustrative only
-
 ## Variable Guide
 
 ### Key Variables Used in Analysis
@@ -126,52 +81,52 @@ Data <- CGSS_similar
 | `weight` | Sampling weight | Continuous | 0.1-3 | Survey weight (normalized, mean = 1) |
 | `id` | Respondent ID | Integer | 1-n | Unique identifier |
 
-### Sample Restriction
 
-The analysis applies **equation-specific restrictions**:
+## Using the Repository
 
-- **Migs and Migl** (migration equations): Restricted to **rural respondents only** (`Urb == 0`)
-  - Rationale: Urban residents cannot migrate (already living in cities)
-  - Implemented via: `| subset(Urb == 0)` in formula
+### Option 1: With Original Data (Recommended for Research)
 
-- **All other equations**: Include full sample with all respondents
+If you have obtained the CGSS 2006 data:
 
-### Missing Data
+```r
+# 1. Place CGSS data file in Data/ directory
+# 2. Load and prepare:
 
-- **Original data:** Handled through complete-case analysis in 3SLS estimation
-- **Synthetic data:** Generated without missing values for simplicity
-- **Best practice:** Document all missing data mechanisms in real applications
+source("Deps.R")
 
-#### Common sources of missingness in CGSS:
-- Refusal to answer (especially income, political affiliation)
-- Item nonresponse (forgetting, inability to estimate)
-- Implicit restrictions (e.g., Migs/Migl only for rural residents)
+# Load CGSS data
+CGSS_data <- read.csv("Data/CGSS_2006.csv")
+# or read.spss(), read.dta(), etc. depending on format
+# Apply utility functions found in Meritocracy.lib.R to process data, and prepare data accordingly
 
-## Data Preparation Steps
+# 3. Run analysis scripts with original data
+source("Examples/Example_Meritocracy.R")
+```
 
-### In the Example Script
+### Option 2: With Synthetic Data (For Learning/Testing)
 
-The `Example_Meritocracy.R` performs:
+The repository unfortunately cannot include a synthetic data generator that creates data mirroring the CGSS structure, due to licencing agreements. Comparable real data (or synthetic) is nonetheless viable with our workflow, with prior variable preparation.
 
-1. **Variable transformation:**
-   - Log transformation for income variables
-   - Scaling of continuous variables
-   - Construction of squared terms for age and income
+```r
+source("Deps.R")
 
-2. **Merit index construction:**
-   - Factor analysis on individual items (in real analysis)
-   - Synthetic generation (in example)
-   - Standardization to 1-5 scale
+# Run analysis with synthetic data/your own
+Data <- CGSS_similar
 
-3. **Missing value handling:**
-   - Complete-case analysis (rows with any NA removed)
-   - Implicit restrictions (e.g., rural-only samples)
-   - Survey weight application
+# Note: Results will differ from the original analysis,
+# but the workflow and code structure is identical
+```
 
-4. **Data validation:**
-   - Range checks (e.g., age 18-85)
-   - Correlation verification
-   - Summary statistics
+**Advantages of free-use data alternatives and/or synthetic data:**
+- ✓ Freely distributable
+- ✓ No licensing restrictions
+- ✓ Useful for teaching and methodology demonstration
+- ✓ Preserves variable correlations and distributions
+
+**Limitations:**
+- ✗ Not representative of actual population (in this case, Chinese)
+- ✗ Results cannot be used for policy recommendations
+- ✗ Magnitudes of effects are illustrative only
 
 ## Replication with Original Data
 
@@ -219,6 +174,53 @@ Data <- CGSS_raw
 source("Examples/Example_Meritocracy.R")
 ```
 
+## Data Preparation Steps using the example script
+
+## The `Example_Meritocracy.R` performs:
+
+1. **Variable transformation:**
+   - Log transformation for income variables
+   - Scaling of continuous variables
+   - Construction of squared terms for age and income
+
+2. **Merit index construction:**
+   - Factor analysis on individual items (in real analysis)
+   - Synthetic generation (in example)
+   - Standardization to 1-5 scale
+
+3. **Missing value handling:**
+   - Complete-case analysis (rows with any NA removed)
+   - Implicit restrictions (e.g., rural-only samples)
+   - Survey weight application
+
+4. **Data validation:**
+   - Range checks (e.g., age 18-85)
+   - Correlation verification
+   - Summary statistics
+
+
+### Sample Restriction
+
+The analysis applies **equation-specific restrictions**:
+
+- **Migs and Migl** (migration equations): Restricted to **rural respondents only** (`Urb == 0`)
+  - Rationale: Urban residents cannot migrate (already living in cities)
+  - Implemented via: `| subset(Urb == 0)` in formula
+
+- **All other equations**: Include full sample with all respondents
+
+### Missing Data
+
+- **Original data:** Handled through complete-case analysis in 3SLS estimation
+- **Synthetic data:** Generated without missing values for simplicity
+- **Best practice:** Document all missing data mechanisms in real applications
+
+#### Common sources of missingness in CGSS:
+- Refusal to answer (especially income, political affiliation)
+- Item nonresponse (forgetting, inability to estimate)
+- Implicit restrictions (e.g., Migs/Migl only for rural residents)
+
+
 ## Recommended Citations
 
 When using this code with CGSS data:
@@ -231,12 +233,6 @@ When using this code with CGSS data:
   url = {http://www.chinagss.org}
 }
 
-@article{AuthorYear,
-  author = {Your Name and Your Professor},
-  title = {Your Paper Title},
-  year = {Year},
-  journal = {Your Journal}
-}
 ```
 
 ## Questions & Support
