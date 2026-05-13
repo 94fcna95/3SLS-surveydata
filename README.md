@@ -87,7 +87,6 @@ example is provided in Example_Labor_Economics.R
 ```
 .
 ├── README.md                          # This file
-├── QUICKSTART.md                      # Quick reference guide
 ├── CONTRIBUTING.md                    # Contribution guidelines
 ├── Deps.R                             # Central dependency loader
 ├── LICENSE                            # MIT License
@@ -101,11 +100,11 @@ example is provided in Example_Labor_Economics.R
 ├── Examples/                          # Illustrative examples
 │   ├── Example_Labor_Economics.R      # Teaching example (open data)
 │   ├── labor_data_generator.R         # Synthetic labor market data
-│   ├── Example_Meritocracy.R          # Research application (CGSS structure)
+│   ├── Example_Meritocracy.R          # Research application (CGSS structure required)
 │   
 │
 ├── Data/                              # Data directory
-│   └── README_DATA.md                 # Data documentation & licensing
+│   └── README_DATA.md                 # Data documentation, Chinese case-study information & licensing
 │
 └── docs/                              # Additional documentation
     └── VARIABLE_GUIDE.md              # Variable definitions & structure
