@@ -271,9 +271,26 @@ The last command produces output ready for inclusion in a LaTeX file. Results ar
 ```r
 source("Deps.R")
 source("Examples/Example_Labor_Economics.R")
+
+#This runs the complete teaching pipeline automatically. By hand, the workflow is as follows:
+
+eq1 = log_wage    ~ education + experience + hours_worked + region
+eq2 = education   ~ ability + family_background + age + experience
+eq3 = hours_worked ~ log_wage + education + age + region
+
+equations <- list(log_wage    = eq1,
+                  education   = eq2,
+                  hours_worked = eq3)
+
+inst = ~ age + family_background + ability + experience + region
+
+fit <- threeSLS_system(equations = equations,
+                       inst      = inst,
+                       data      = Data_clean,
+                       weights   = weight)
 ```
 
-This runs the complete teaching pipeline automatically.
+
 
 ## Zhou, Lubrano (2026) 3SLS model
 
