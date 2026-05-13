@@ -1,5 +1,3 @@
-# ChatGpt 3SLS
-
 # -------------------------
 # Example usage (uncomment to run)
 # -------------------------
@@ -18,7 +16,6 @@
 library(Matrix)
 library(MASS)
 
-# ChatGpt 3SLS
 
 
 threeSLS_system <- function(equations, inst, data, weights = NULL,
