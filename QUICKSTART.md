@@ -2,190 +2,148 @@
 
 Get up and running with the 3SLS system in 5 minutes.
 
-## 1. **Clone the Repository, or download the package**
+## 1. Clone
 
 ```bash
-git clone https://github.com/yourusername/3sls-meritocracy.git
-cd 3sls-meritocracy
-
-# install.packages("devtools")
-devtools::install_github("94fcna95/surveysearch")
-
-To download the package, click on 'Code' -> 'Download Zip' and extract the files. Add to working directory.
+git clone https://github.com/94fcna95/3SLS-surveydata.git
+cd 3SLS-surveydata
 ```
 
-## 2. **Open R/RStudio**
+> **Alternative:** Click `Code` → `Download ZIP`, extract, and set as your working directory.
 
-From the repository directory:
+---
+
+## 2. Open
+
+In R or RStudio, set your working directory to the repository root:
 
 ```r
-setwd("path/to/3sls-meritocracy")
+setwd("path/to/3SLS-surveydata")
 ```
 
-## 3. **Load Everything**
+> All file paths in the repository are relative — the scripts will not work unless you are running from the root directory.
+
+---
+
+## 3. Load
 
 ```r
 source("Deps.R")
 ```
 
 This single command:
-- Installs/loads all required packages
-- Loads the 3SLS estimation functions
-- Loads LaTeX formatting tools
-- Loads application-specific utilities
+- Installs and loads all required packages (`MASS`, `Matrix`, `weights`, `xtable`, `DescTools`, `psych`)
+- Sources the three core libraries:
+  - `R/CGT-3SLS-lib.r` — 3SLS estimation functions
+  - `R/CGT-LaTex-lib.r` — LaTeX output functions
+  - `R/Meritocracy-lib.r` — utility functions (`POLS`, `Transl`, `EGP`)
+- Verifies all key functions are available before analysis begins
 
-## 4. **Run the Example (with Synthetic Data)**
-
-```r
-source("Examples/Example_Meritocracy.R")
-```
-
-This will:
-- Generate synthetic CGSS-like data
-- Estimate a 6-equation 3SLS system
-- Display structural results
-- Generate LaTeX tables
-- Show reduced-form analysis
-- Compute elasticities
-- Run diagnostics
-
-**Total runtime:** 5-30 seconds (depending on your computer)
-
-## 5. **View the Results**
-
-Results are stored in the `fit` object:
-
-```r
-# View summary
-summary(fit)
-
-# Access coefficients for a specific equation
-fit$structural$coefficients$RP
-
-# Get residuals
-fit$residuals$RP
-
-# Get fitted values
-fit$fitted$RP
-
-# Get variance-covariance
-fit$structural$vcov_ml
-```
+> You do not need to call `source("Deps.R")` manually if running an example script — it is called automatically.
 
 ---
 
-## Common Tasks
+## 4. Run the Example (Labor Market)
 
-### **Get LaTeX Tables for Publication**
+```r
+source("Examples/Example_Labor_Economics.R")
+```
+
+This teaching example demonstrates the 3SLS methodology using freely distributable synthetic data, addressing a classic simultaneity problem:
+
+```
+log_wage  ~ education + experience + employment + region
+education ~ ability + family_background + age + experience
+employment ~ log_wage + education + age + region
+```
+It produces:
+- Structural coefficient estimates
+- Reduced form and impact multipliers
+- Publication-ready LaTeX tables
+- Residual diagnostics and correlations
+
+**Expected runtime:** 5–30 seconds depending on your machine.
+
+---
+
+## 5. View Results
+
+```r
+# Full summary with diagnostics
+summary(fit)
+```
+
+| Slot | Contents |
+|------|----------|
+| `fit$structural$coefficients` | Structural coefficients by equation |
+| `fit$structural$vcov_ml` | ML variance-covariance matrix |
+| `fit$structural$vcov_robust` | Robust variance-covariance matrix |
+| `fit$residuals$education` | Residuals for a given equation |
+| `fit$fitted$education` | Fitted values for a given equation |
+
+---
+
+## 6. Common Tasks
+
+### Get LaTeX Tables
 
 ```r
 # Structural equations
 latex_struct <- latex_structural_3SLS(fit, robust = TRUE)
-print(latex_struct$RP)  # Redistribution preference equation
+print(latex_struct$RP)
 
 # Reduced form
 latex_reduced <- latex_reduced_3SLS(fit, data = Data_clean)
 print(latex_reduced$RP)
 ```
 
-### **Compute Elasticities**
+### Compute Reduced Form and Elasticities
 
 ```r
-# Reduced form provides impact multipliers
 rf <- reduced_form_3SLS(fit, data = Data_clean)
-Pi <- rf$Pi  # Reduced form coefficients
+Pi <- rf$Pi  # Reduced form coefficients and impact multipliers
 ```
 
-### **Check Residual Correlations**
+### Check Residual Correlations
 
 ```r
-# Justifies use of 3SLS (should show interdependence)
+# High correlations justify 3SLS over equation-by-equation OLS
 residual_matrix <- do.call(cbind, fit$residuals)
 cor(residual_matrix, use = "complete.obs")
 ```
 
-### **Use Your Own Data**
+### Troubleshooting
 
-Replace the synthetic data generation with your data:
-
-```r
-source("Deps.R")
-
-# Load YOUR data instead of synthetic
-load("path/to/your/CGSS2006.RData")
-# or: your_data <- read.csv("your_file.csv")
-
-# Define equations
-equations <- list(
-  Migs = Migs ~ water + ...,
-  # ... your equations
-)
-
-# Run 3SLS
-fit <- threeSLS_system(
-  equations = equations,
-  inst = your_instruments,
-  data = your_data,
-  weights = your_weights
-)
-```
+| Error | Fix |
+|-------|-----|
+| `Cannot find file Deps.R` | Check `getwd()` — must be in repository root |
+| `Package X not found` | Packages install automatically; if not: `install.packages("X")` |
+| `object 'threeSLS_system' not found` | Run `source("Deps.R")` first |
+| Unexpected `NA` values | Check `sum(complete.cases(your_data))` and subset sizes (e.g. `sum(Urb == 0)`) |
 
 ---
 
-## Troubleshooting
+## 7. Going Further (3SLS Meritocracy)
 
-### **"Cannot find file Deps.R"**
-Make sure you're in the repository directory:
-```r
-getwd()  # Check current directory
-setwd("/path/to/repo")  # Change if needed
-```
-
-### **"Package X not found"**
-They'll install automatically. If not:
-```r
-install.packages("package_name")
-```
-
-### **"object 'threeSLS_system' not found"**
-Run `source("Deps.R")` first. This loads all functions.
-
-### **Results look weird / NA values**
-Check for:
-1. Missing data: `sum(complete.cases(your_data))`
-2. Sample size too small for subsets: `sum(Urb == 0)` for rural-only equations
-3. Perfect multicollinearity: Check correlations
-
----
+The labor market example is a pedagogical entry point. The full research application is the **meritocracy and redistribution in China** study (Zhou & Lubrano, 2026), which uses a 6-equation system on CGSS 2006 survey data.
 
 ## Next Steps
 
-- 📖 Read [README.md](README.md) for full documentation
-- 🔍 Check [Data/README_DATA.md](Data/README_DATA.md) for variable definitions
-- 📊 Review [Examples/Example_Meritocracy.R](Examples/Example_Meritocracy.R) for detailed comments
-- 💻 Explore the [R/](R/) directory to understand function structure
+| Resource | Contents |
+|----------|----------|
+| `README.md` | Complete documentation, the 3-equation model, and research context with 7-equation model|
+| `Data/README_DATA.md` | CGSS data access, licensing, and citation |
+| `docs/VARIABLE_GUIDE.md` | Full variable definitions and structure |
 
----
-
-## Key Functions
-
-| Function | Purpose |
-|----------|---------|
-| `threeSLS_system()` | Main 3SLS estimation |
-| `summary.threeSLS_fit()` | Display results |
-| `reduced_form_3SLS()` | Compute reduced form |
-| `latex_structural_3SLS()` | LaTeX structural tables |
-| `latex_reduced_3SLS()` | LaTeX reduced form tables |
-| `POLS()` | Polychoric transformation for ordinal data |
-| `Transl()` | Translate vector to start at 1 |
+> The meritocracy example requires CGSS 2006 data or a similarly structured survey dataset. See `Data/README_DATA.md` for access instructions.
 
 ---
 
 ## Questions?
 
-- 📧 Contact: [your.email@institution.edu]
-- 📚 See: README.md (detailed documentation)
-- 🐛 Found a bug? Open an issue on GitHub
+- Contact: [malo.raballand@sciencespo.fr]
+- See: README.md (detailed documentation)
+- Found a bug? Open an issue on GitHub
 
 ---
 
