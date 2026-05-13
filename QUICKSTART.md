@@ -85,6 +85,33 @@ summary(fit)
 
 ## 6. Common Tasks
 
+### Available Functions
+
+#### `R/CGT-3SLS-lib.r` — Estimation
+
+| Function | Arguments | Description |
+|----------|-----------|-------------|
+| `threeSLS_system()` | `equations, inst, data, weights, ridge_ZZ, ridge_Omega, auto_drop_instruments, verbose` | Main 3SLS estimation. Returns structural coefficients, ML and robust variance-covariance matrices, residuals, fitted values, Omega, and reduced form per equation |
+| `summary.threeSLS_fit()` | `object, digits, robust` | Prints structural estimates with significance stars, residual diagnostics, Omega matrix, residual correlations, and pseudo log-likelihood |
+| `reduced_form_3SLS()` | `fit, data, digits` | Computes the restricted reduced form Π = CB⁻¹ from structural parameters. Returns impact multipliers, delta-method standard errors, and elasticities at sample means |
+
+#### `R/CGT-LaTex-lib.r` — Output
+
+| Function | Arguments | Description |
+|----------|-----------|-------------|
+| `latex_structural_3SLS()` | `object, digits, robust` | Generates a list of `xtable` objects, one per equation, with coefficients, t-values, significance stars, and R² |
+| `latex_reduced_3SLS()` | `fit, data, digits` | Generates a list of `xtable` objects for reduced form equations, plus instrument means, dependent variable means, and B⁻¹ |
+
+#### (Chinese 3SLS specific!) `R/Meritocracy-lib.r` — Utilities 
+
+| Function | Arguments | Description |
+|----------|-----------|-------------|
+| `POLS()` | `ys, w, inorm` | Polychoric ordinal transformation. Converts Likert-scale responses to a continuous approximation using weighted percentiles and inverse normal CDF |
+| `Transl()` | `x` | Shifts a vector so its minimum value is 1 |
+| `EGP()` | `x, urban` | Recodes raw occupational codes to the EGP class schema (1 = higher controllers … 9 = farm labor) |
+| `C_to_symbolic_df()` | `C, tol` | Converts a matrix to symbolic representation (`0` or `c`) for displaying structural restriction patterns |
+| `make_X_from_Pi()` | `Pi, data` | Builds a design matrix aligned with a reduced form Π matrix |
+
 ### Get LaTeX Tables
 
 ```r
