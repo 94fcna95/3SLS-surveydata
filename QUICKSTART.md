@@ -125,7 +125,7 @@ cor(residual_matrix, use = "complete.obs")
 
 ## 7. Going Further (3SLS Meritocracy)
 
-The labor market example is a pedagogical entry point. The full research application is the **meritocracy and redistribution in China** study (Zhou & Lubrano, 2026), which uses a 6-equation system on CGSS 2006 survey data.
+The labor market example is a pedagogical entry point. The full research application is the **meritocracy and redistribution in China** study (Zhou & Lubrano, 2026), which uses a 7-equation system on CGSS 2006 survey data.
 
 ## Next Steps
 
