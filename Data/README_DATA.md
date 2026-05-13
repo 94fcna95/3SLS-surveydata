@@ -1,5 +1,7 @@
 # Data Documentation & Licensing
 
+**Note : If you wish to test the tools in this package, without looking into our case-study, you can refer to the Read.Me and the pre-installed comprehensive labor-market example**
+
 ## Data Source
 
 This project uses the **China General Social Survey (CGSS) 2006** microdata.
@@ -84,120 +86,53 @@ The original CGSS data is **copyrighted** and not freely redistributable. Users 
 
 ## Using the Repository
 
-### Option 1: With Original Data (Recommended for Research)
+Clone the repository and run from its root directory.
 
-If you have obtained the CGSS 2006 data:
+### With Original CGSS Data
+
+Place your CGSS 2006 file in `Data/`, then:
 
 ```r
-# 1. Place CGSS data file in Data/ directory
-# 2. Load and prepare:
-
-source("Deps.R")
-
-# Load CGSS data
-CGSS_data <- read.csv("Data/CGSS_2006.csv")
-# or read.spss(), read.dta(), etc. depending on format
-# Apply utility functions found in Meritocracy.lib.R to process data, and prepare data accordingly
-
-# 3. Run analysis scripts with original data
 source("Examples/Example_Meritocracy.R")
 ```
 
-### Option 2: With Synthetic Data (For Learning/Testing)
+### With Synthetic Data (For Learning/Testing)
 
-The repository unfortunately cannot include a synthetic data generator that creates data mirroring the CGSS structure, due to licencing agreements. Comparable real data (or synthetic) is nonetheless viable with our workflow, with prior variable preparation.
-
-```r
-source("Deps.R")
-
-# Run analysis with synthetic data/your own
-Data <- CGSS_similar
-
-# Note: Results will differ from the original analysis,
-# but the workflow and code structure is identical
-```
-
-**Advantages of free-use data alternatives and/or synthetic data:**
-- ✓ Freely distributable
-- ✓ No licensing restrictions
-- ✓ Useful for teaching and methodology demonstration
-- ✓ Preserves variable correlations and distributions
-
-**Limitations:**
-- ✗ Not representative of actual population (in this case, Chinese)
-- ✗ Results cannot be used for policy recommendations
-- ✗ Magnitudes of effects are illustrative only
-
-## Replication with Original Data
-
-### Step 1: Prepare CGSS Raw Data
+The repository cannot include a synthetic data generator mirroring the CGSS structure due to licensing agreements. Comparable real or synthetic data is nonetheless viable with our workflow, with prior variable preparation.
 
 ```r
-# Load raw CGSS 2006 data
-CGSS_raw <- read.dta("CGSS2006_original.dta")
-
-# Create dichotomous variables
-CGSS_raw$female <- as.numeric(CGSS_raw$q_gender == 2)
-CGSS_raw$Urb <- as.numeric(CGSS_raw$q_region_type == 1)
-CGSS_raw$Rur <- 1 - CGSS_raw$Urb
-
-# Log transformation
-CGSS_raw$linc <- log(CGSS_raw$q_income + 1)
-CGSS_raw$linc2 <- CGSS_raw$linc^2
+source("Examples/Example_Meritocracy.R")  # uses CGSS_synthetic by default
 ```
 
-### Step 2: Construct Merit Indices
+| | Synthetic / Free-use data |
+|---|---|
+| ✓ | Freely distributable, no licensing restrictions |
+| ✓ | Useful for teaching and methodology demonstration |
+| ✗ | Not representative of the actual Chinese population |
+| ✗ | Results cannot be used for policy recommendations |
+| ✗ | Magnitudes of effects are illustrative only |
 
-```r
-# Load merit items from raw data
-merit_items <- CGSS_raw[, c("q_merit_talent", "q_merit_ambition", 
-                             "q_merit_work", "q_merit_education")]
+> All dependencies, libraries, and utility functions — including `Meritocracy-lib.r`, `CGT-3SLS-lib.r` and `CGT-LaTex-lib.r` — are loaded automatically via `Deps.R`.
 
-# Apply factor analysis
-library(psych)
-fa_result <- fa(merit_items, nfactors = 2, fm = "ml", weights = CGSS_raw$weight)
+### What `Example_Meritocracy.R` Does
 
-# Extract factor scores
-FcM1 <- factor.scores(merit_items, fa_result)$scores[, 1]
-FcM2 <- factor.scores(merit_items, fa_result)$scores[, 2]
-```
+1. **Variable transformation** — log transformation for income, squared terms for age and income, scaling of continuous variables
+2. **Merit index construction** — factor analysis on individual items (real data) or synthetic generation (example), standardized to 1–5 scale
+3. **Missing value handling** — complete-case analysis, implicit restrictions (e.g. rural-only samples), survey weight application
+4. **Data validation** — range checks, correlation verification, summary statistics
 
-### Step 3: Run Full Analysis
+### What `Deps.R` Does
 
-```r
-source("Deps.R")
+`Deps.R` is called automatically by `Example_Meritocracy.R` and handles all setup:
 
-# Your prepared data
-Data <- CGSS_raw
+1. **Package installation** — checks for and installs any missing R packages (`MASS`, `Matrix`, `weights`, `xtable`, `DescTools`, `psych`)
+2. **Core libraries** — sources the three internal libraries in order:
+   - `R/CGT-3SLS-lib.r` — 3SLS estimation functions
+   - `R/CGT-LaTex-lib.r` — LaTeX output functions
+   - `R/Meritocracy-lib.r` — utility functions (`POLS`, `Transl`, `EGP`)
+3. **Verification** — confirms all key functions are available before analysis begins
 
-# Run analysis
-source("Examples/Example_Meritocracy.R")
-```
-
-## Data Preparation Steps using the example script
-
-## The `Example_Meritocracy.R` performs:
-
-1. **Variable transformation:**
-   - Log transformation for income variables
-   - Scaling of continuous variables
-   - Construction of squared terms for age and income
-
-2. **Merit index construction:**
-   - Factor analysis on individual items (in real analysis)
-   - Synthetic generation (in example)
-   - Standardization to 1-5 scale
-
-3. **Missing value handling:**
-   - Complete-case analysis (rows with any NA removed)
-   - Implicit restrictions (e.g., rural-only samples)
-   - Survey weight application
-
-4. **Data validation:**
-   - Range checks (e.g., age 18-85)
-   - Correlation verification
-   - Summary statistics
-
+You do not need to call `source("Deps.R")` manually.
 
 ### Sample Restriction
 
