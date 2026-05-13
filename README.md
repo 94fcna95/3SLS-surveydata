@@ -191,28 +191,6 @@ This reproduces a complete analysis pipeline:
 - Publication-ready LaTeX output
 - Diagnostic testing and interpretation
 
-## Data
-
-### Meritocracy Research: CGSS Data
-**Read more in the /Data folder**
-
-The main research uses the **China General Social Survey (CGSS) 2006** microdata.
-
-
-**Copyright Notice:** The original CGSS data cannot be included in this repository due to copyright restrictions.
-
-### Teaching Example: Synthetic Labor Data
-
-For the labor economics teaching example, synthetic data is generated automatically:
-
-**`Examples/labor_data_generator.R`** creates a synthetic dataset that:
-- Replicates realistic labor market relationships
-- Demonstrates proper structure for 3SLS systems
-- Preserves meaningful correlations
-- Is freely distributable and publicly available
-- Requires no external data files
-
-
 ## Example Workflow
 
 ### Meritocracy Research Pipeline
@@ -290,6 +268,26 @@ fit <- threeSLS_system(equations = equations,
                        weights   = weight)
 ```
 
+## Data
+
+### Meritocracy Research: CGSS Data
+**Read more in the /Data folder**
+
+The main research uses the **China General Social Survey (CGSS) 2006** microdata.
+
+
+**Copyright Notice:** The original CGSS data cannot be included in this repository due to copyright restrictions.
+
+### Teaching Example: Synthetic Labor Data
+
+For the labor economics teaching example, synthetic data is generated automatically:
+
+**`Examples/labor_data_generator.R`** creates a synthetic dataset that:
+- Replicates realistic labor market relationships
+- Demonstrates proper structure for 3SLS systems
+- Preserves meaningful correlations
+- Is freely distributable and publicly available
+- Requires no external data files
 
 
 ## Zhou, Lubrano (2026) 3SLS model
