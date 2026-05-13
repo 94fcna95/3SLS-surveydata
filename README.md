@@ -194,16 +194,12 @@ This reproduces a complete analysis pipeline:
 ## Data
 
 ### Meritocracy Research: CGSS Data
+**Read more in the /Data folder**
 
 The main research uses the **China General Social Survey (CGSS) 2006** microdata.
 
-**Copyright Notice:** The original CGSS data cannot be included in this repository due to copyright restrictions.
 
-**Data Access:**
-1. Visit the [CGSS website](http://www.chinagss.org)
-2. Request access to the 2006 wave microdata
-3. Place the CGSS data file in the `Data/` directory
-4. Update the file path in `Example_Meritocracy.R`
+**Copyright Notice:** The original CGSS data cannot be included in this repository due to copyright restrictions.
 
 ### Teaching Example: Synthetic Labor Data
 
