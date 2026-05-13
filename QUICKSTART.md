@@ -69,7 +69,7 @@ It produces:
 ## 3. View Results
 
 ```r
-# Full summary with diagnostics
+# Full summary with diagnostics (lengthy, we recommend using the functions below)
 summary(fit)
 ```
 
