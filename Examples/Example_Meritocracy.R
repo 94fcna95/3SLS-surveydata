@@ -38,9 +38,9 @@ source("Deps.R")
 
 cat("\nStep 2: Loading/generating data...\n")
 
-# Generate synthetic data
+# Generate synthetic data or load your own dataset
 source("Examples/synthetic_data_generator.R")
-Data_raw <- CGSS_synthetic
+Data_raw <- CGSS_synthetic # or comparable data
 
 cat("\nOriginal dataset size: ", nrow(Data_raw), " observations\n")
 
