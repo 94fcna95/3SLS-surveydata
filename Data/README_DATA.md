@@ -57,27 +57,26 @@ source("Examples/Example_Meritocracy.R")
 
 ### Option 2: With Synthetic Data (For Learning/Testing)
 
-The repository includes a synthetic data generator that creates data mirroring the CGSS structure:
+The repository unfortunately cannot include a synthetic data generator that creates data mirroring the CGSS structure, due to licencing agreements. Comparable real data (or synthetic) is nonetheless viable with our workflow, with prior variable preparation.
 
 ```r
 source("Deps.R")
-source("Examples/synthetic_data_generator.R")
 
-# Run analysis with synthetic data
-Data <- CGSS_synthetic
+# Run analysis with synthetic data/your own
+Data <- CGSS_similar
 
 # Note: Results will differ from the original analysis,
 # but the workflow and code structure is identical
 ```
 
-**Advantages of synthetic data:**
+**Advantages of free-use data alternatives and/or synthetic data:**
 - ✓ Freely distributable
 - ✓ No licensing restrictions
 - ✓ Useful for teaching and methodology demonstration
 - ✓ Preserves variable correlations and distributions
 
 **Limitations:**
-- ✗ Not representative of actual Chinese population
+- ✗ Not representative of actual population (in this case, Chinese)
 - ✗ Results cannot be used for policy recommendations
 - ✗ Magnitudes of effects are illustrative only
 
@@ -86,50 +85,39 @@ Data <- CGSS_synthetic
 ### Key Variables Used in Analysis
 
 #### **Outcome Variables**
+| Variable | Description |
+|----------|-------------|
+| `Migs` | Seasonal migrant |
+| `Migl` | Long-term migrant |
+| `RP` | Redistribution preference |
 
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `Migs` | Short-term migration | Ordinal | 1-5 | Migration intention/behavior, short time period |
-| `Migl` | Lont-term migration | Ordinal | 1-5 | Migration intention/behavior, long term |
-| `RP` | Redistribution preference | Ordinal | 1-5 | Preference for government redistribution |
-| `FcM1` | Merit factor 1 | Continuous | 1-5 | Individual effort (talent, ambition, work ethic) |
-| `FcM2` | Merit factor 2 | Continuous | 1-5 | Education & talent dimension |
-| `FcAM` | Actual merit factors | Continuous | 1-5 | Non-meritocratic factors (networks, luck, family) |
-
-#### **Environmental/Economic Variables**
-
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `water` | Water access | Ordinal | 1-5 | Quality of water access/supply |
-| `flood` | Flood exposure | Ordinal | 1-5 | Exposure to flooding risk |
-| `rev` | Revenue/economy | Ordinal | 1-5 | Local economic conditions |
-| `Dif` | Income inequality | Ordinal | 1-5 | Perception of income differences |
+#### **Instrumental Variables**
+| Variable | Description |
+|----------|-------------|
+| `flood` | Importance of floods in the province |
+| `water` | Water resources in the province |
 
 #### **Demographic Variables**
-
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `age` | Age | Continuous | 18-85 | Respondent age in years |
-| `age2` | Age squared | Continuous | - | Age² / 100 (for non-linear effects) |
-| `female` | Gender | Binary | 0,1 | 1 = female, 0 = male |
-| `Urb` | Urban | Binary | 0,1 | 1 = urban, 0 = rural |
-| `Rur` | Rural | Binary | 0,1 | 1 = rural, 0 = urban |
-| `yeduc` | Education years | Continuous | 0-20 | Years of formal education completed |
+| Variable | Description |
+|----------|-------------|
+| `age` | Age of the respondent |
+| `female` | Gender of the respondent |
+| `Single` | Marital status of the respondent |
+| `party` | The respondent is a member of the CCP |
 
 #### **Economic Variables**
+| Variable | Description |
+|----------|-------------|
+| `linc` | Log of personal income+1 |
+| `idlinc` | Indicator for a zero income |
+| `lowerfin` | Having negative financial expectations |
+| `Dif` | Median wage discrimination for peasant worker at the provincial level |
 
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `Income` | Household income | Continuous | - | Annual household income (in log scale: `linc`) |
-| `linc` | Log income | Continuous | - | Natural log of household income |
-| `linc2` | Log income squared | Continuous | - | (linc)² |
-
-#### **Belief & Political Variables**
-
-| Variable | Name | Type | Range | Description |
-|----------|------|------|-------|-------------|
-| `party` | Party member | Binary | 0,1 | 1 = member, 0 = non-member |
-| `believer` | Religious believer | Binary | 0,1 | 1 = believer, 0 = non-believer |
+#### **Hukou Status**
+| Variable | Description |
+|----------|-------------|
+| `Rur` | Having a rural hukou |
+| `Urb` | Having an urban hukou |
 
 #### **Survey Design**
 
@@ -154,7 +142,7 @@ The analysis applies **equation-specific restrictions**:
 - **Synthetic data:** Generated without missing values for simplicity
 - **Best practice:** Document all missing data mechanisms in real applications
 
-#### Common sources of missingness:
+#### Common sources of missingness in CGSS:
 - Refusal to answer (especially income, political affiliation)
 - Item nonresponse (forgetting, inability to estimate)
 - Implicit restrictions (e.g., Migs/Migl only for rural residents)
