@@ -12,7 +12,7 @@ The implementation provides novel extensions to standard 3SLS estimations availa
 - **Robust variance estimation** with multiple covariance options
 - **Reduced-form analysis** and structural inference tools
 - **Complete diagnostic suite** (residuals, correlations, fitted values)
-- ****For compatibility reasons**, the calling syntax is very similar to that of systemfit.
+- **For compatibility reasons**, the calling syntax is very similar to that of systemfit.
 
 The code is compatible with most survey data structures and can be applied to various research questions. We provide two such examples in this repository. Moreover, the functions are optimal for large data sets. The quoted research paper makes use of a survey dataset with more than 10,000 observations.
 
