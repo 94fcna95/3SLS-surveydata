@@ -250,6 +250,25 @@ fit <-threeSLS_system(
 summary(fit)
 print(latex_structural_3SLS(fit, robust = TRUE))
 ```
+### Results
+
+The last command produces output ready for inclusion in a LaTeX file. Results are summarised below. GitHub does not render LaTeX math, so the output is screenshotted from a LaTeX Document.
+
+#### Structural Equation: `Migs`
+<img width="229" height="145" alt="Screenshot 2026-05-13 114837" src="https://github.com/user-attachments/assets/6e14a423-fd84-4bb5-a08a-ba3bdc2a4938" />
+
+
+#### Structural Equation: `Migl`
+
+<img width="399" height="272" alt="Screenshot 2026-05-13 114956" src="https://github.com/user-attachments/assets/31cecb35-101c-4d25-bcf7-1da09b130e40" />
+
+
+#### Structural Equation: `RP`
+
+<img width="398" height="293" alt="Screenshot 2026-05-13 115029" src="https://github.com/user-attachments/assets/443da5ce-cc44-4dae-9554-a990f38d44dc" />
+
+*Significance codes: \*\*\* p < 0.001 · \*\* p < 0.01 · \* p < 0.05 · . p < 0.1*
+
 
 ### Labor Economics Teaching Example
 
