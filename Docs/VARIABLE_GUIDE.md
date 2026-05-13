@@ -4,616 +4,223 @@ Complete documentation of all variables used in the analysis.
 
 ## Table of Contents
 
-1. [Outcome Variables](#outcome-variables)
-2. [Exogenous Variables](#exogenous-variables)
-3. [Constructed Variables](#constructed-variables)
-4. [Survey Design](#survey-design)
-5. [Data Coding Schemes](#data-coding-schemes)
+1. [Introduction](#introduction)
+2. [Three-Equation Model (GitHub Demo)](#three-equation-model-github-demo)
+3. [Seven-Equation Model (Zhou & Lubrano 2026)](#seven-equation-model-zhou--lubrano-2026)
+4. [How Constructed Variables Are Built](#how-constructed-variables-are-built)
+5. [Survey Design](#survey-design)
 6. [Missing Data](#missing-data)
 
 ---
 
-## Outcome Variables
+## Introduction
 
-### **Migs** — Small-Scale Internal Migration
+All variables are drawn from the **China General Social Survey (CGSS) 2006**, a repeated cross-section survey covering 28 provinces and 10,151 weighted observations of individuals aged 18 and above. The survey is representative of both rural and urban populations; survey weights are essential to correct for the systematic under-sampling of the rural population (without weights, the rural share drops from 62% to 49%).
 
-**Description:** Respondent's intentions regarding small-scale, short-distance internal migration (e.g., provincial or regional moves).
+This guide is divided into two parts:
+- **Section 2** documents the simplified **3-equation model** used in `Example_Meritocracy.R`, intended for users learning the 3SLS workflow with this repository.
+- **Section 3** documents the full **7-equation model** of Zhou & Lubrano (2026), intended for researchers replicating the published results.
 
-**Type:** Ordinal (1-5 scale)  
-**Sample:** Rural residents only (`Urb == 0`)  
-**Source:** CGSS item on migration intentions
-
-**Coding:**
-- 1 = Never thought about migration
-- 2 = Thought about it
-- 3 = Prepared / discussing with family
-- 4 = Made concrete plans
-- 5 = Already migrated
-
-**Interpretation:** Higher values indicate stronger migration behavior/intentions.
-
-**In the model:** Dependent variable in equation 1; appears as regressor in equations for RP, FcM2, FcAM.
+Sections 4–6 apply to both models.
 
 ---
 
-### **Migl** — Large-Scale Internal Migration
+## Three-Equation Model (GitHub Demo)
 
-**Description:** Respondent's intentions regarding large-scale, long-distance internal migration (e.g., inter-provincial moves to economically developed areas).
-
-**Type:** Ordinal (1-5 scale)  
-**Sample:** Rural residents only (`Urb == 0`)  
-**Source:** CGSS item on migration to urban areas
-
-**Coding:** Same as Migs (1-5 scale)
-
-**Interpretation:** Captures desire for permanent relocation to urban centers or economically advantaged regions.
-
-**In the model:** Dependent variable in equation 2; affects RP and all merit indices in structural equations.
-
----
-
-### **RP** — Redistribution Preference
-
-**Description:** Respondent's preference for government-led income redistribution policies.
-
-**Type:** Ordinal (1-5 scale)  
-**Sample:** Full sample (all respondents)  
-**Source:** CGSS item on redistribution preference
-
-**Coding:**
-- 1 = Strongly oppose redistribution
-- 2 = Oppose
-- 3 = Neutral
-- 4 = Favor
-- 5 = Strongly favor redistribution
-
-**Interpretation:** Proxy for socialist/egalitarian values; relates to meritocratic beliefs (paradoxically—more believer in merit = less support for redistribution).
-
-**In the model:** Dependent variable in equation 3; reflects synthesis of migration experiences and merit perceptions.
-
----
-
-### **FcM1** — Merit Factor 1: Individual Effort
-
-**Description:** Factor score capturing perceptions of merit based on individual effort and talent. Combines beliefs about:
-- Importance of intelligence
-- Importance of ambition
-- Importance of hard work/effort
-
-**Type:** Continuous (1-5 scale after standardization)  
-**Derivation:** First factor from factor analysis on effort-related items (weight ≈ 0.5)  
-**Sample:** Full sample  
-
-**Interpretation:** 
-- Higher values = Stronger belief that individual talent and effort determine success
-- Reflects "meritocratic" worldview
-
-**In the model:** 
-- Dependent in equation 4
-- Regressor in RP, FcM2, FcAM equations
-- Feedback effects: migration affects merit beliefs and vice versa
-
----
-
-### **FcM2** — Merit Factor 2: Education & Talent
-
-**Description:** Factor score capturing importance of education and natural talent. Combines:
-- Importance of education level
-- Importance of talent/gifts
-- Related to opportunity factors
-
-**Type:** Continuous (1-5 scale after standardization)  
-**Derivation:** Second factor from factor analysis (weight ≈ 0.5)  
-**Correlation with education:** Moderately positive (people with more education believe education matters)  
-
-**Interpretation:**
-- Reflects structural factors (education levels) interacting with belief in meritocracy
-- More sensitive to respondent's own education level than FcM1
-
-**In the model:**
-- Dependent in equation 5
-- Regressor in RP, FcAM equations
-- Feeds back to affect redistribution preferences
-
----
-
-### **FcAM** — Actual Merit Factors (Non-Meritocratic)
-
-**Description:** Factor score capturing perceived importance of **non-meritocratic** factors in determining success:
-- Family background/wealth
-- Social networks and connections
-- Luck and fate
-- Political performance
-- "Knowing the right people"
-
-**Type:** Continuous (1-5 scale after standardization)  
-**Derivation:** First factor from factor analysis on opportunity/luck items (weight ≈ 0.33-0.40 each)  
-
-**Interpretation:**
-- Higher values = Stronger belief that non-meritocratic factors determine success
-- Represents skepticism about meritocracy system
-- Likely correlates with redistributive preferences
-
-**In the model:**
-- Dependent in equation 6
-- Regressor in FcM1, FcM2 equations
-- Central to understanding barriers to meritocracy
-
----
-
-## Exogenous Variables
-
-### **Environmental/Shock Variables**
-
-#### **water** — Water Access Quality
-
-**Description:** Perceived quality and accessibility of clean water supply.
-
-**Type:** Ordinal (1-5 scale)  
-**Source:** CGSS environmental satisfaction items
-
-**Coding:**
-- 1 = Very poor / Very dissatisfied
-- 3 = Neutral / Average
-- 5 = Excellent / Very satisfied
-
-**Interpretation:**
-- Proxy for local infrastructure quality
-- Environmental stress indicator
-- May affect migration decisions
-
----
-
-#### **flood** — Flood/Disaster Exposure
-
-**Description:** Respondent's exposure to flooding or water-related disasters in their area.
-
-**Type:** Ordinal (1-5 scale)  
-**Source:** CGSS item on local environmental hazards
-
-**Coding:**
-- 1 = No exposure / Never occurs
-- 3 = Occasional/moderate exposure
-- 5 = Frequent/severe exposure
-
-**Interpretation:**
-- **Key instrumental variable** for migration equations
-- Pushes rural residents toward migration (especially Migl for better living conditions)
-- Environmental shock affecting wellbeing
-
----
-
-#### **rev** — Local Revenue/Economic Conditions
-
-**Description:** Perceived local government fiscal capacity and economic development level.
-
-**Type:** Ordinal (1-5 scale)  
-**Source:** CGSS local economic items
-
-**Coding:** 1-5 scale (1 = underdeveloped, 5 = highly developed)
-
-**Interpretation:**
-- Affects migration pull/push factors
-- Influences merit belief formation (developing areas may have different meritocratic ideologies)
-- Proxy for regional inequality
-
----
-
-#### **Dif** — Income Inequality Perception
-
-**Description:** Respondent's perception of income differences within their community or country.
-
-**Type:** Ordinal (1-5 scale)  
-**Source:** CGSS item: "Are income differences in [community/China] too large?"
-
-**Coding:**
-- 1 = Differences are too small / Too equal
-- 3 = About right / Neutral
-- 5 = Differences are way too large
-
-**Interpretation:**
-- Directly affects redistribution preferences
-- May influence merit belief formation (high inequality → different meritocratic narratives)
-- Depends on reference group (local vs national)
-
----
-
-### **Demographic Variables**
-
-#### **age** — Age
-
-**Type:** Continuous (years)  
-**Range:** 18-85  
-**Source:** CGSS household roster
-
-**Interpretation:**
-- Affects migration propensity (younger = more likely)
-- Lifecycle effects on political preferences
-- Non-linear effects (include age²)
-
----
-
-#### **age2** — Age Squared (Scaled)
-
-**Type:** Continuous  
-**Formula:** age² / 100  
-**Scaling:** Divided by 100 to keep coefficients interpretable
-
-**Interpretation:** Captures non-linear (inverted-U or U-shaped) relationships with outcomes.
-
-**Example:** Migration typically decreases with age, but at a decreasing rate.
-
----
-
-#### **female** — Gender
-
-**Type:** Binary  
-**Coding:** 
-- 0 = Male
-- 1 = Female
-
-**Interpretation:**
-- Different migration patterns by gender
-- Potential discrimination effects on merit beliefs
-- Political preference differences
-
----
-
-#### **Urb** — Urban Residence
-
-**Type:** Binary  
-**Coding:**
-- 0 = Rural
-- 1 = Urban
-
-**Interpretation:**
-- Defines sample for Migs/Migl (migration only for rural)
-- Urban residents are outside migration market
-- Different institutional contexts for merit
-
----
-
-#### **Rur** — Rural Residence
-
-**Type:** Binary  
-**Coding:**
-- 0 = Urban (Rur = 1 - Urb)
-- 1 = Rural
-
-**Same information as Urb** but inverted; used as regressor rather than sample restriction.
-
----
-
-### **Economic Variables**
-
-#### **yeduc** — Years of Education
-
-**Type:** Continuous (years)  
-**Range:** 0-20  
-**Source:** CGSS education attainment
-
-**Coding:**
-- 0 = No formal education
-- 6 = Primary school completion
-- 9 = Junior middle school
-- 12 = High school
-- 16 = University degree
-- 20 = Advanced degree
-
-**Interpretation:**
-- Fundamental human capital measure
-- Strongly predicts income
-- Affects merit beliefs (educated believe more in meritocracy)
-- Affects migration propensity (more education → more migration options)
-
----
-
-#### **linc** — Log Household Income
-
-**Type:** Continuous (natural log)  
-**Formula:** log(Income + 1)  
-**Source:** CGSS household income item
-
-**Interpretation:**
-- Percentage interpretation for coefficients: 0.01 = 1% increase in income
-- Avoids outlier issues with raw income
-- Better captures marginal effects at low vs high incomes
-
----
-
-#### **linc2** — Log Income Squared
-
-**Type:** Continuous  
-**Formula:** linc²  
-
-**Interpretation:**
-- Captures non-linear income effects
-- Often: higher income → more opposition to redistribution
-- But relationship may be non-linear
-
----
-
-#### **Income** — Raw Household Income
-
-**Type:** Continuous  
-**Range:** 0+  
-**Formula:** exp(linc)  
-**Units:** Local currency (Chinese Yuan)
-
-**Interpretation:**
-- Used in descriptive analysis
-- For inference, use log form (linc) to avoid heteroskedasticity
-- May have large outliers
-
----
-
-### **Political & Belief Variables**
-
-#### **party** — Communist Party Membership
-
-**Type:** Binary  
-**Coding:**
-- 0 = Non-member (or candidate)
-- 1 = Member (or candidate member)
-
-**Interpretation:**
-- Ideological alignment with socialist principles
-- May affect redistribution preferences
-- May affect migration (political restrictions, connections)
-
----
-
-#### **believer** — Religious Belief
-
-**Type:** Binary  
-**Coding:**
-- 0 = Non-believer / Atheist / Spiritual only
-- 1 = Religious believer (any faith)
-
-**Interpretation:**
-- Religion affects political values
-- May relate to trust in institutions
-- Potentially affects migration decisions (social networks)
-
----
-
-## Constructed Variables
-
-### **How Merit Indices Are Created** (In the Full Analysis)
-
-#### **Step 1: Raw Survey Items**
-
-CGSS asks respondents to rate importance of various factors for success:
-
-```
-Q: "To what extent do these factors help someone succeed?"
-Response: 1=not important ... 5=very important
-
-Items include:
-- Family wealth/background
-- Education
-- Intelligence / talent
-- Hard work / ambition
-- Social networks
-- Political connections
-- Good looks
-- Luck / destiny
-```
-
----
-
-#### **Step 2: Factor Analysis**
-
-Factor analysis reduces these 8-10 items to 2-3 underlying dimensions:
+Variables used in the demonstration model:
 
 ```r
-fa_merit <- fa(merit_items, 
-               nfactors = 2, 
-               fm = "ml",              # Maximum likelihood extraction
-               weights = survey_weight) # Weighted analysis
-
-# Factor 1 (FcM1): "Individual Effort"
-#   - High loadings: intelligence, ambition, hard work
-#   - Eigenvalue ≈ 2.5
-
-# Factor 2 (FcM2): "Education & Talent"  
-#   - High loadings: education, talent, gifts
-#   - Eigenvalue ≈ 1.8
+eq1 = Migs ~ water + flood + age + female + linc + idlinc | subset(Urb == 0)
+eq2 = Migl ~ water + flood + age + Single + linc + idlinc + Dif | subset(Urb == 0)
+eq3 = RP ~ water + party + lowerfin + linc + idlinc + Rur + Migs + Migl
 ```
+
+### Endogenous Variables
+
+| Variable | Description | Type | Sample |
+|----------|-------------|------|--------|
+| `Migs` | Seasonal migrant — rural resident working temporarily outside home area | Binary (0/1) | Rural only (`Urb == 0`) |
+| `Migl` | Long-term migrant — rural resident with countryside origin, permanently relocated | Binary (0/1) | Rural only (`Urb == 0`) |
+| `RP` | Preference for government-led redistribution. POLS transform of a 1–4 Likert scale ("One should tax the rich to help the poor") | Continuous (POLS) | Full sample |
+
+### Instrumental Variables
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| `flood` | Provincial flood severity index. Motivates long-term migration, impedes seasonal migration. Included in `eq3` to avoid omitted variable bias | Continuous (0–1 index) |
+| `water` | Average provincial water resources over the last four decades (cubic metres per km²). Included in all three equations to purge `flood` of long-term opinion effects | Continuous |
+
+### Demographic Variables
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| `age` | Age of the respondent in years | Continuous (18–85) |
+| `female` | Gender: 1 = female, 0 = male | Binary (0/1) |
+| `Single` | Marital status: 1 = single, 0 = otherwise | Binary (0/1) |
+| `party` | CCP membership: 1 = member, 0 = non-member | Binary (0/1) |
+
+### Economic Variables
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| `linc` | Natural log of personal income + 1 | Continuous |
+| `idlinc` | Zero income indicator: 1 = zero personal income (11% of sample), 0 = otherwise | Binary (0/1) |
+| `lowerfin` | Negative financial expectations: 1 = expects family financial situation to worsen, 0 = otherwise | Binary (0/1) |
+| `Dif` | Provincial median wage discrimination index for peasant workers — difference between justified and actual income, purged of individual characteristics. See [Section 4.1](#41-discrimination-index-dif) | Continuous |
+
+### Hukou Status
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| `Rur` | Holds rural hukou: 1 = rural, 0 = urban | Binary (0/1) |
+| `Urb` | Holds urban hukou: 1 = urban, 0 = rural. Used as sample restriction (`Urb == 0`) in migration equations | Binary (0/1) |
+
+> `Rur` and `Urb` are complements: `Rur = 1 - Urb`. `Urb` defines the sample restriction; `Rur` enters as a regressor in `eq3`.
 
 ---
 
-#### **Step 3: Factor Scores**
+## Seven-Equation Model (Zhou & Lubrano 2026)
 
-Individual factor scores computed for each respondent:
+Variables used in the full published model:
 
 ```r
+eq1 = Migs ~ water + rev + flood + age + age2 + female + believer + idlinc  | subset(Urb == 0)
+eq2 = Migl ~ water + rev + flood + age + Single + yeduc + Dif + idlinc      | subset(Urb == 0)
+eq3 = FcAM ~ water + rev + age + age2 + party + believer + Dif + Urb
+eq4 = FcM1 ~ water + rev + yeduc + beterfin + FcAM + Dif + Urb
+eq5 = FcM2 ~ water + rev + yeduc + FcAM + FcM1 + Dif + Urb
+eq6 = RP   ~ water + rev + lowerfin + linc + idlinc + FcAM + FcM1 + FcM2 + Rur + Migs + Migl
+eq7 = linc ~ water + rev + age + age2 + female + Single + yeduc + idlinc + Urb
+```
+
+### Endogenous Variables
+
+| Variable | Description | Type | Sample |
+|----------|-------------|------|--------|
+| `Migs` | Seasonal migrant | Binary (0/1) | Rural only (`Urb == 0`) |
+| `Migl` | Long-term migrant | Binary (0/1) | Rural only (`Urb == 0`) |
+| `FcAM` | Anti-meritocratic beliefs — perceived importance of Guanxi, demographic ascription, and family background for success. First factor from a second-stage factor analysis on three anti-merit dimensions. See [Section 4.2](#42-merit-factor-scores-fcm1-fcm2-fcam) | Continuous (factor score) | Full sample |
+| `FcM1` | Classical meritocracy — perceived importance of ambition and hard work. First factor from factor analysis on merit items | Continuous (factor score) | Full sample |
+| `FcM2` | Natural ability — perceived importance of intelligence, education, and good looks. Second factor from factor analysis on merit items | Continuous (factor score) | Full sample |
+| `RP` | Redistribution preference. POLS transform of a 1–4 Likert scale | Continuous (POLS) | Full sample |
+| `linc` | Log income — endogenous in the full model, estimated in `eq7` | Continuous | Full sample |
+
+### Instrumental Variables
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| `flood` | Provincial flood severity index (Liao et al. 2013). Valid instrument: affects migration decisions but is included in opinion equations to correct for omitted variable bias | Continuous (0–1 index) |
+| `water` | Average provincial water resources over last four decades. Included in all equations | Continuous |
+| `rev` | Average provincial rainfall level over last four decades (mm per m²). Included in all equations alongside `water` | Continuous |
+
+### Demographic Variables
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| `age` | Age of the respondent in years | Continuous (18–85) |
+| `age2` | Age squared, scaled: age² / 100. Captures non-linear lifecycle effects | Continuous |
+| `female` | Gender: 1 = female, 0 = male | Binary (0/1) |
+| `Single` | Marital status: 1 = single, 0 = otherwise | Binary (0/1) |
+| `party` | CCP membership: 1 = member, 0 = non-member | Binary (0/1) |
+| `believer` | Religious believer: 1 = any faith, 0 = non-believer | Binary (0/1) |
+| `yeduc` | Years of formal education completed (0 = never attended school; primary = 6; university = 16) | Continuous (0–20) |
+
+### Economic Variables
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| `linc` | Natural log of personal income + 1. Also endogenous in `eq7` | Continuous |
+| `idlinc` | Zero income indicator: 1 = zero personal income, 0 = otherwise | Binary (0/1) |
+| `lowerfin` | Negative financial expectations: 1 = expects financial situation to worsen | Binary (0/1) |
+| `beterfin` | Positive financial expectations: 1 = expects financial situation to improve. Significant in meritocracy equations (`eq4`, `eq5`) | Binary (0/1) |
+| `Dif` | Provincial median wage discrimination index for peasant workers. See [Section 4.1](#41-discrimination-index-dif) | Continuous |
+
+### Hukou Status
+
+| Variable | Description | Type |
+|----------|-------------|------|
+| `Rur` | Holds rural hukou: 1 = rural, 0 = urban | Binary (0/1) |
+| `Urb` | Holds urban hukou: 1 = urban, 0 = rural | Binary (0/1) |
+
+---
+
+## How Constructed Variables Are Built
+
+### 4.1 Discrimination Index (`Dif`)
+
+`Dif` measures perceived wage discrimination against peasant workers at the provincial level. The CGSS asks respondents to estimate both the **actual** and **justified** monthly income for peasant workers. Raw answers depend on the respondent's own income, education, and social context, so these are purged via two separate log-linear regressions (controlling for `linc`, `yeduc`, `Rur`, `Migs`, `Migl`, and province dummies). The discrimination index is then computed as the difference between the exponentiated predicted values. The provincial median is then taken, restricted to respondents holding a rural hukou.
+
+### 4.2 Merit Factor Scores (`FcM1`, `FcM2`, `FcAM`)
+
+The CGSS contains 14 questions on perceived factors for career success, rated 1 (not important) to 5 (crucial). These are divided into two theoretical groups:
+
+**Meritocratic items (5 items):** education, intelligence, ambition, hard work, talent and good looks.
+A factor analysis on these 5 items (weighted, maximum likelihood) yields two factors:
+- `FcM1` — **Classical meritocracy**: high loadings on ambition (0.946) and hard work (0.636)
+- `FcM2` — **Natural ability**: high loadings on intelligence, education, and good looks
+
+**Anti-meritocratic items (9 items):** family wealth, parents' education, birthplace, gender, age, social networks (Guanxi), knowing people in power, political loyalty, fate and destiny.
+A first factor analysis yields three dimensions (Guanxi, demographic ascription, family background). A second factor analysis on these three dimensions, imposing a single factor, produces:
+- `FcAM` — **Anti-meritocratic beliefs**: a single index summarising all non-meritocratic advantages
+
+All indices are translated so their minimum value is 1, making them conformable to the original 1–5 scale of the survey items.
+
+```r
+# Factor analysis on merit items
+fa_merit <- fa(merit_items, nfactors = 2, fm = "ml", weights = weight)
 FcM1 <- factor.scores(merit_items, fa_merit)$scores[, 1]
 FcM2 <- factor.scores(merit_items, fa_merit)$scores[, 2]
+
+# Translate to start at 1
+FcM1 <- Transl(FcM1)
+FcM2 <- Transl(FcM2)
+FcAM <- Transl(FcAM)
 ```
 
----
+### 4.3 POLS Transformation
 
-#### **Step 4: Standardization**
+Ordinal variables on Likert scales (`RP`, and migration intentions prior to binarisation) are transformed using the **Probit OLS (POLS)** method of van Praag & Ferrer-i-Carbonell (2004). The transformation:
 
-Rescale to 1-5 scale for interpretability:
+1. Computes the weighted sample frequency for each response category
+2. Recovers category thresholds as quantiles of the standard normal distribution
+3. Assigns to each observation the conditional expectation of the normal distribution within its category interval
 
-```r
-FcM1_scaled <- Transl(FcM1)  # Translate to start at 1
-FcM1_scaled <- scale_to_1_5(FcM1_scaled)  # Scale to max 5
-```
-
----
-
-### **POLS Transformation** (Polychoric Ordinal)
-
-For ordinal variables with few categories (e.g., 1-5 Likert), the POLS transformation:
-
-1. Computes weighted percentiles for each category
-2. Applies inverse normal CDF to percentiles
-3. Creates continuous approximation to underlying latent variable
+This produces a continuous approximation to the underlying latent utility, allowing ordinal variables to be used directly in a linear system without ordered probit.
 
 ```r
-RP_continuous <- POLS(RP_ordinal, weight = weight, inorm = 1)
+RP <- POLS(RP_ordinal, w = weight, inorm = 1)
 ```
 
 ---
 
 ## Survey Design
 
-### **Survey Weights**
+| Variable | Description | Type |
+|----------|-------------|------|
+| `weight` | Sampling weight, normalized (mean ≈ 1). Corrects for differential sampling probabilities and systematic under-sampling of the rural population | Continuous |
+| `id` | Unique respondent identifier | Integer |
 
-**Definition:** Weight variable (`weight`) reflects survey sampling design.
-
-**Source:** CGSS provides these to adjust for:
-- Differential sampling probabilities
-- Non-response patterns
-- Stratification by region/province
-
-**Properties:**
-- Normalized: mean(weight) ≈ 1
-- Range: typically 0.5-2.0
-- Always positive
-
-**Usage in 3SLS:**
-```r
-fit <- threeSLS_system(..., weights = weight)
-```
-
-**Interpretation:** Each observation weighted by their representativeness of population.
-
----
-
-### **Equation-Specific Samples**
-
-#### **Rural-Only Equations** (Migs, Migl)
-
-```r
-Migs ~ water + flood + ... | subset(Urb == 0)
-Migl ~ flood + age + ... | subset(Urb == 0)
-```
-
-**Rationale:** 
-- Urban residents cannot be internal migrants (conceptually undefined)
-- Only rural population makes migration decisions
-- Improves model specification
-
-**Implementation:**
-- 3SLS function handles subsets automatically
-- Creates separate X, Z matrices for each equation
-- Preserves residual correlation structure
-
----
-
-## Data Coding Schemes
-
-### **Ordinal Variables (Likert Scale)**
-
-Most social variables coded as 1-5 Likert scales:
-
-```
-1 = Strongly disagree / Very dissatisfied / Never
-2 = Disagree / Dissatisfied / Rarely
-3 = Neither agree nor disagree / Neutral / Sometimes
-4 = Agree / Satisfied / Often
-5 = Strongly agree / Very satisfied / Always
-```
-
-**In analysis:**
-- Can use raw scale (treating as approximately continuous)
-- Can apply POLS transformation for better normality
-- Can use factor scores from factor analysis
-
----
-
-### **Binary Variables**
-
-Dummy/indicator coding (0/1):
-
-```
-0 = No / Absence
-1 = Yes / Presence
-```
-
-Examples: `female`, `Urb`, `party`, `believer`
-
----
-
-### **Continuous Variables**
-
-- **age, yeduc:** Directly observed
-- **linc:** Log transformation of raw income
-- **FcM1, FcM2, FcAM:** Factor scores from FA
+**Equation-specific sample restrictions:** The migration equations (`eq1`, `eq2`) are estimated on rural residents only (`Urb == 0`), as urban residents are by definition outside the internal migration market. This is implemented via the `| subset()` syntax in `threeSLS_system()`, which handles separate design matrices per equation while preserving the residual correlation structure across the full system.
 
 ---
 
 ## Missing Data
 
-### **Sources of Missingness**
-
-1. **Item non-response:** Respondent refused or forgot to answer specific item
-2. **Implicit restrictions:** e.g., Migs is NA for all urban residents (by design)
-3. **Skip patterns:** e.g., income asked only if worked in past year
-4. **Data errors:** Invalid codes treated as NA
-
----
-
-### **Handling in Analysis**
-
-3SLS estimation uses **complete-case analysis**:
-
-```r
-# Remove rows with any NA
-Data_clean <- Data[complete.cases(Data), ]
-
-# Then estimate
-fit <- threeSLS_system(..., data = Data_clean)
-```
-
-**Note:** This reduces sample size but maintains consistency across equations.
-
----
-
-### **Impact on Results**
-
-- **Listwise deletion:** Conservative but sample reduces
-- **Reported n:** Always report how many observations actually used
-- **Check:** `nrow(Data)` vs `nrow(Data_clean)`
-
----
-
-## Variable Correlation Matrix
-
-Example correlations (from synthetic data):
-
-```
-         age  yeduc  linc  water  flood  RP  FcM1  FcM2  FcAM
-age     1.00
-yeduc   0.15  1.00
-linc    0.12  0.45  1.00
-water   0.08 -0.05  0.12  1.00
-flood  -0.10 -0.08 -0.15  0.35  1.00
-RP     -0.02 -0.08 -0.18  0.22  0.25  1.00
-FcM1    0.10  0.20  0.18 -0.12  0.05 -0.35  1.00
-FcM2    0.08  0.35  0.25 -0.10  0.08 -0.32  0.55  1.00
-FcAM   -0.05  0.10  0.08  0.15  0.20  0.42 -0.20 -0.18  1.00
-```
-
-**Key patterns:**
-- Education strongly correlates with income
-- Flood exposure pushes toward redistribution
-- Merit beliefs negative correlate with redistribution (endogenous by design)
+- **Income:** The CGSS records fewer than 8% missing values for personal income. In the original paper these are imputed via a log regression on gender, age, education, and province dummies. In the repository example, complete-case analysis is used.
+- **Zero income:** 11% of valid observations report zero annual income. These are treated as valid and flagged by `idlinc = 1`, not removed.
+- **Other variables:** Complete-case analysis is applied — rows with any `NA` across the variables used in the system are removed prior to estimation.
+- **Implicit missingness:** `Migs` and `Migl` are undefined for urban residents by design; this is handled through the `subset(Urb == 0)` restriction rather than NA coding.
 
 ---
 
 ## References
 
-- CGSS Codebook: http://www.chinagss.org/
-- Factor Analysis: Fabrigar et al. (1999), Psychological Bulletin
-- Survey Methods: Kish (1965), Survey Sampling
-- Log-transformation: Skrondal & Rabe-Hesketh (2004)
+- van Praag, B. and Ferrer-i-Carbonell, A. (2004). *Happiness Quantified: A Satisfaction Calculus Approach.* Oxford University Press.
+- Liao, Y. et al. (2013). Spatial pattern analysis of natural disasters in China from 2000 to 2011. *Journal of Catastrophology*, 28(4):55–60.
+- Zhou, X. and Lubrano, M. (2026). Meritocracy and preference for redistribution in China: the impact of internal migrations. *AMSE Working Paper.*
+- CGSS Codebook: http://www.chinagss.org
 
 ---
 
 **Last Updated:** May 2026  
-**For:** 3SLS Meritocracy Research Project
+**For:** 3SLS Meritocracy Research Project — `docs/VARIABLE_GUIDE.md`
