@@ -14,7 +14,7 @@ The implementation provides novel extensions to standard 3SLS estimations availa
 - **Complete diagnostic suite** (residuals, correlations, fitted values)
 - **For compatibility reasons**, the calling syntax is very similar to that of systemfit
 
-The code is compatible with most survey data structures and can be applied to various research questions. Two illustrative examples are provided. The quoted research paper makes use of a survey dataset with more than 10,000 observations.
+The code is compatible with most survey data structures and can be applied to various research questions. Two illustrative examples are provided. The code has been optimized for use with large survey datasets (10 000+ observations in the quoted paper).
 
 > For installation and a quick start, see [QUICKSTART.md](QUICKSTART.md).
 
