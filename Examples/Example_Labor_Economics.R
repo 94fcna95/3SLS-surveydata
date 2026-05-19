@@ -64,7 +64,7 @@ equations <- list(
   hours_worked = hours_worked ~ log_wage + education + age + region
 )
 
-instruments <- ~ age + family_background + ability + experience + region
+inst_formula <- ~ age + family_background + ability + experience + region
 
 cat("✓ System of 3 equations defined\n")
 cat("✓ Instruments: age, family_background, ability, experience, region\n\n")
@@ -77,7 +77,7 @@ cat("\nStep 5: Estimating 3SLS system...\n\n")
 
 fit <- threeSLS_system(
   equations = equations,
-  inst      = instruments,
+  inst      = inst_formula,
   data      = Data_clean,
   weights   = weight,
   verbose   = FALSE
