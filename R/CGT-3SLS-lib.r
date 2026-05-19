@@ -66,7 +66,10 @@ threeSLS_system <- function(equations, inst, data, weights = NULL,
   weights_vec[is.na(weights_vec)] <- 0
   if (any(weights_vec < 0)) stop("weights must be non-negative")
   
+  start_time <- proc.time()
+  
   rownames(data) <- seq_len(n)
+  
   
   # containers
 y_list <- X_list <- Z_list <- idx_list <- w_list <- sqrtw_list <- vector("list", K)
@@ -129,6 +132,17 @@ instrument_names <- vector("list", K)
     bi <- solve(XtX_w, crossprod(X_hat * sw, yi * sw))
     beta_2sls[[i]] <- as.numeric(bi)
     resid_unw[[i]] <- as.numeric(yi - Xi %*% bi)
+  }
+  
+  if (verbose) {
+    cat("\n--- First-Stage (2SLS) Coefficients ---\n")
+    for (i in seq_len(K)) {
+      cat(sprintf("\nEquation: %s\n", eq_names[i]))
+      b <- beta_2sls[[i]]
+      names(b) <- colnames(X_list[[i]])
+      print(round(b, 4))
+    }
+    cat("----------------------------------------\n\n")
   }
   
   # Omega (weighted pairwise)
@@ -297,6 +311,12 @@ instrument_names <- vector("list", K)
   names(reduced_form) <- eq_names
   out$reduced_form <- reduced_form
   
+  elapsed <- proc.time() - start_time
+  out$elapsed <- elapsed
+  if (verbose) {
+    cat(sprintf("\nComputing time: %.2f seconds\n", elapsed["elapsed"]))
+  }
+  
   class(out) <- "threeSLS_fit"
   out
 }
@@ -307,7 +327,13 @@ instruments <- function(object, ...) {
   UseMethod("instruments")}
 
 instruments.threeSLS_fit <- function(object, ...) {
-  object$instruments}
+  eq_names <- object$eq_names
+  result <- lapply(object$eq_names, function(nm) {
+    inst <- object$instruments[[nm]]
+    inst[!inst %in% eq_names]
+  })
+  setNames(result, eq_names)
+}
                         
 #####
 
@@ -367,6 +393,9 @@ print(tab, digits = digits)
   #}
   
   if (robust && !is.null(object$structural$vcov_robust)) cat("\nRobust sandwich standard errors (HC0-style) used for structural coefficients.\n") else cat("\nModel-based standard errors used for structural coefficients.\n")
+  if (!is.null(object$elapsed)) {
+    cat(sprintf("\nComputing time: %.2f seconds\n", object$elapsed["elapsed"]))
+  }
   invisible(object)
 }
 
