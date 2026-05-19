@@ -92,6 +92,7 @@ required_functions <- c(
   "reduced_form_3SLS",
   "latex_structural_3SLS",
   "latex_reduced_3SLS",
+  "instruments",
   "POLS",
   "Transl"
 )
@@ -128,6 +129,7 @@ cat("Key functions:\n")
 cat("  • threeSLS_system()           : Main 3SLS estimation\n")
 cat("  • summary.threeSLS_fit()      : Summary statistics\n")
 cat("  • reduced_form_3SLS()         : Reduced form computation\n")
+cat("  • instruments()              : Return instrument matrix names\n")
 cat("  • latex_structural_3SLS()     : LaTeX structural results\n")
 cat("  • latex_reduced_3SLS()        : LaTeX reduced form results\n")
 cat("  • POLS()                      : Ordinal transformation\n")
