@@ -69,8 +69,11 @@ threeSLS_system <- function(equations, inst, data, weights = NULL,
   rownames(data) <- seq_len(n)
   
   # containers
-  y_list <- X_list <- Z_list <- idx_list <- w_list <- sqrtw_list <- vector("list", K)
-  p_vec <- integer(K); q_vec <- integer(K); dropped_instruments <- vector("list", K)
+y_list <- X_list <- Z_list <- idx_list <- w_list <- sqrtw_list <- vector("list", K)
+p_vec <- integer(K)
+q_vec <- integer(K)
+dropped_instruments <- vector("list", K)
+instrument_names <- vector("list", K)
   
   # build per-equation data
   for (i in seq_len(K)) {
@@ -86,6 +89,7 @@ threeSLS_system <- function(equations, inst, data, weights = NULL,
     X_i <- model.matrix(main_f, mf)
     
     Z_full_i <- model.matrix(inst, data = data_sub)
+    instrument_names[[i]] <- colnames(Z_full_i)
     
     ok <- complete.cases(y_i, X_i, Z_full_i)
     if (!any(ok)) stop(sprintf("Equation %s: no complete rows after removing NAs in y, X, Z", eq_names[i]))
@@ -265,6 +269,7 @@ threeSLS_system <- function(equations, inst, data, weights = NULL,
     Omega = Omega, Omega_inv = Omega_inv,
     residuals = resid_struct_list,
     reduced_form = NULL, # we'll build as before
+    instruments = setNames(instrument_names, eq_names),
     dropped_instruments = setNames(dropped_instruments, eq_names),
     eq_names = eq_names, idx_list = setNames(idx_list, eq_names),
     call = match.call(), logLik = loglik, total_params = total_p
@@ -296,6 +301,14 @@ threeSLS_system <- function(equations, inst, data, weights = NULL,
   out
 }
 
+# Accessor for instruments -----------------------------------------------
+
+instruments <- function(object, ...) {
+  UseMethod("instruments")}
+
+instruments.threeSLS_fit <- function(object, ...) {
+  object$instruments}
+                        
 #####
 
 # Enhanced summary: stars in separate column, robust option
@@ -325,7 +338,9 @@ summary.threeSLS_fit <- function(object, digits = 4, robust = TRUE) {
     tab <- data.frame(Estimate = round(coefs, digits), Std.Error = round(se, digits),
                       "t value" = round(tval, digits+1), "Pr(>|t|)" = ifelse(pval < 0.001, "< 0.001", formatC(signif(pval, 3), format = "g")),
                       Signif = stars, row.names = names(coefs), check.names = FALSE, stringsAsFactors = FALSE)
-    cat("\nEquation:", nm, "\n"); print(tab, digits = digits)
+    cat("\nEquation:", nm, "\n")
+cat("Instruments:", paste(instruments(object)[[nm]], collapse = ", "), "\n\n")
+print(tab, digits = digits)
     resid_struct <- object$residuals[[i]]
     cat("Residuals (structural): mean =", round(mean(resid_struct), digits), " SD =", round(sd(resid_struct), digits), "\n")
     # R2 calculation removed (undefined function .R2_structural)
