@@ -2,7 +2,7 @@
 
 ## Summary
 
-This repository contains the code accompanying research studying **meritocracy dynamics, migration decisions, and preferences for redistribution** in China. All main functions and dependencies required to apply the **3SLS estimation methodology** using R are available in this repository, along with comprehensive examples. This project is associated to _Xun Zhou and Michel Lubrano (2026) Meritocracy and preference for redistribution in China: the impact of internal migrations (forthcoming)_.
+This repository contains code accompanying research studying **meritocracy dynamics, migration decisions, and preferences for redistribution** in China. All main functions and dependencies required to apply  **3SLS estimation methodology** using R are available in this repository, along with comprehensive examples. This project is associated to _Xun Zhou and Michel Lubrano (2026) Meritocracy and preference for redistribution in China: the impact of internal migrations (forthcoming)_. We include a "teaching example" with synthetic data to allow users unfamiliar with 3SLS to explore the methodology before applying it to their own data.
 
 The implementation provides novel extensions to standard 3SLS estimations available in the R package _systemfit_:
 - **Sub-sampling capability** for equation-specific sample restrictions via `subset()` syntax
